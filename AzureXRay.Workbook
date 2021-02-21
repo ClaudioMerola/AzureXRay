@@ -1,0 +1,1361 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "parameters": [
+          {
+            "id": "199eea3c-8bcd-476b-9725-bd30f531678a",
+            "version": "KqlParameterItem/1.0",
+            "name": "Subscription",
+            "label": "Subscriptions",
+            "type": 6,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "value": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "includeAll": true,
+              "showDefault": false
+            }
+          },
+          {
+            "id": "c3fd835c-236d-4fbe-ad09-5cdd41462fa5",
+            "version": "KqlParameterItem/1.0",
+            "name": "ResourceGroup",
+            "label": "Resource Group",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "resourcecontainers\r\n| where type == \"microsoft.resources/subscriptions/resourcegroups\"\r\n| project name",
+            "crossComponentResources": [
+              "{Subscription}"
+            ],
+            "value": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources"
+          },
+          {
+            "id": "f41ba5f7-61b4-457e-8700-2e4e70d69264",
+            "version": "KqlParameterItem/1.0",
+            "name": "LogAnalyticsWorkspace",
+            "label": "Log Analytics Workspace",
+            "type": 5,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "where type =~ 'microsoft.operationalinsights/workspaces'\r\n| summarize by id, name\r\n| project id",
+            "crossComponentResources": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ],
+              "showDefault": false
+            },
+            "defaultValue": "value::all",
+            "queryType": 1,
+            "resourceType": "microsoft.resourcegraph/resources",
+            "value": [
+              "value::all"
+            ]
+          },
+          {
+            "id": "bd401b11-047b-4fa5-9a5d-6eef4d5195d4",
+            "version": "KqlParameterItem/1.0",
+            "name": "timerange",
+            "label": "Time Range",
+            "type": 4,
+            "value": {
+              "durationMs": 14400000
+            },
+            "typeSettings": {
+              "selectableValues": [
+                {
+                  "durationMs": 3600000
+                },
+                {
+                  "durationMs": 14400000
+                },
+                {
+                  "durationMs": 43200000
+                },
+                {
+                  "durationMs": 86400000
+                },
+                {
+                  "durationMs": 259200000
+                },
+                {
+                  "durationMs": 604800000
+                },
+                {
+                  "durationMs": 1209600000
+                },
+                {
+                  "durationMs": 2419200000
+                },
+                {
+                  "durationMs": 2592000000
+                },
+                {
+                  "durationMs": 5184000000
+                },
+                {
+                  "durationMs": 7776000000
+                }
+              ]
+            }
+          }
+        ],
+        "style": "pills",
+        "queryType": 0,
+        "resourceType": "microsoft.operationalinsights/workspaces"
+      },
+      "name": "parameters - 0"
+    },
+    {
+      "type": 11,
+      "content": {
+        "version": "LinkItem/1.0",
+        "style": "tabs",
+        "links": [
+          {
+            "id": "f8592a17-308d-4e87-84ef-db28bf73278c",
+            "cellValue": "Tab",
+            "linkTarget": "parameter",
+            "linkLabel": "Azure AD",
+            "subTarget": "Azure AD",
+            "style": "link"
+          },
+          {
+            "id": "4f021ba0-c362-461c-9dd4-bf60f6d69173",
+            "cellValue": "Tab",
+            "linkTarget": "parameter",
+            "linkLabel": "AKS",
+            "subTarget": "AKS",
+            "style": "link"
+          },
+          {
+            "id": "3e4db63a-6f04-43bc-92eb-db254c24b1e4",
+            "cellValue": "Tab",
+            "linkTarget": "parameter",
+            "linkLabel": "Virtual Machines",
+            "subTarget": "Virtual Machines",
+            "style": "link"
+          }
+        ]
+      },
+      "name": "links - 3"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 1,
+            "content": {
+              "json": "# Performance Details"
+            },
+            "name": "text - 0"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                  "type": 11,
+                  "content": {
+                    "version": "LinkItem/1.0",
+                    "style": "tabs",
+                    "links": [
+                      {
+                        "id": "87013799-9209-4a46-be9f-b78b5eb52096",
+                        "cellValue": "SubTab",
+                        "linkTarget": "parameter",
+                        "linkLabel": "Performance Overview",
+                        "subTarget": "Performance Overview",
+                        "style": "link"
+                      },
+                      {
+                        "id": "417c40e5-e4cb-438e-81ed-f87c88c035e5",
+                        "cellValue": "SubTab",
+                        "linkTarget": "parameter",
+                        "linkLabel": "Processor",
+                        "subTarget": "Processor",
+                        "style": "link"
+                      },
+                      {
+                        "id": "bd7682fe-ba6c-4865-9069-ea01d3c0ea5f",
+                        "cellValue": "SubTab",
+                        "linkTarget": "parameter",
+                        "linkLabel": "Memory",
+                        "subTarget": "Memory",
+                        "style": "link"
+                      },
+                      {
+                        "id": "fc7175c0-398e-42a7-96db-6af0fccf992c",
+                        "cellValue": "SubTab",
+                        "linkTarget": "parameter",
+                        "linkLabel": "Disk",
+                        "subTarget": "Disk",
+                        "style": "link"
+                      }
+                    ]
+                  },
+                  "name": "links - 0"
+                }
+              ]
+            },
+            "name": "PerfSubGroup"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "Tab",
+        "comparison": "isEqualTo",
+        "value": "Performance"
+      },
+      "name": "Performance"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 1,
+            "content": {
+              "json": "# Azure Active Directory\r\n\r\nThis section is dedicated to give an overall view and health of Active Directory. Some of the information presented here require additional logging configuration at your Azure Active Directory Monitoring blade. For more information regarding Azure Active Directory, click the following link:  [What is Azure Active Directory?](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis)."
+            },
+            "name": "text - 6"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "SigninLogs\r\n| summarize toint(count(UserPrincipalName)) by bin(TimeGenerated, 5m),OperationName\r\n| render timechart",
+                    "size": 1,
+                    "title": "Current Sign-In",
+                    "timeContext": {
+                      "durationMs": 14400000
+                    },
+                    "timeContextFromParameter": "timerange",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "crossComponentResources": [
+                      "{LogAnalyticsWorkspace}"
+                    ]
+                  },
+                  "customWidth": "50",
+                  "name": "query - 0"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "SigninLogs\r\n| summarize toint(count(UserPrincipalName)) by bin(TimeGenerated, 1d),OperationName",
+                    "size": 1,
+                    "title": "Daily Sign-In",
+                    "timeContext": {
+                      "durationMs": 14400000
+                    },
+                    "timeContextFromParameter": "timerange",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "crossComponentResources": [
+                      "{LogAnalyticsWorkspace}"
+                    ],
+                    "visualization": "barchart"
+                  },
+                  "customWidth": "50",
+                  "name": "query - 1"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "SigninLogs\r\n| where isnotnull (LocationDetails.city)\r\n| summarize arg_max(CorrelationId, *) by CorrelationId\r\n| project [\"City\"]= LocationDetails.city, LocationDetails.geoCoordinates.longitude, LocationDetails.geoCoordinates.latitude",
+                    "size": 2,
+                    "title": "Sign-In Heat Map",
+                    "timeContext": {
+                      "durationMs": 14400000
+                    },
+                    "timeContextFromParameter": "timerange",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "crossComponentResources": [
+                      "{LogAnalyticsWorkspace}"
+                    ],
+                    "visualization": "map",
+                    "mapSettings": {
+                      "locInfo": "LatLong",
+                      "latitude": "LocationDetails_geoCoordinates_latitude",
+                      "longitude": "LocationDetails_geoCoordinates_longitude",
+                      "sizeAggregation": "Sum",
+                      "labelSettings": "City",
+                      "legendMetric": "City",
+                      "legendAggregation": "Count",
+                      "itemColorSettings": {
+                        "nodeColorField": "City",
+                        "colorAggregation": "Count",
+                        "type": "heatmap",
+                        "heatmapPalette": "hotCold"
+                      }
+                    }
+                  },
+                  "name": "query - 2"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "SigninLogs\r\n| project TimeGenerated,OperationName,[\"Country\"]= LocationDetails.countryOrRegion,[\"State\"]= LocationDetails.state,[\"City\"]= LocationDetails.city,[\"Device Details\"]=DeviceDetail.operatingSystem,[\"App\"]=ClientAppUsed,[\"App Details\"]=DeviceDetail.browser,[\"Access\"]=AppDisplayName,IPAddress,UserPrincipalName",
+                    "size": 0,
+                    "showAnalytics": true,
+                    "title": "Sign-In Details",
+                    "timeContext": {
+                      "durationMs": 14400000
+                    },
+                    "timeContextFromParameter": "timerange",
+                    "showExportToExcel": true,
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "crossComponentResources": [
+                      "{LogAnalyticsWorkspace}"
+                    ],
+                    "gridSettings": {
+                      "rowLimit": 10000,
+                      "filter": true
+                    }
+                  },
+                  "name": "query - 3"
+                }
+              ]
+            },
+            "name": "Sign-In SubTab"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "tes"
+                  },
+                  "name": "text - 0"
+                }
+              ]
+            },
+            "conditionalVisibility": {
+              "parameterName": "SubTab",
+              "comparison": "isEqualTo",
+              "value": "Users"
+            },
+            "name": "SubTab-Users"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "Tab",
+        "comparison": "isEqualTo",
+        "value": "Azure AD"
+      },
+      "name": "Sign-In"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 1,
+            "content": {
+              "json": "# Azure Virtual Machines"
+            },
+            "name": "text - 3"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| where properties.extended.instanceView.powerState.displayStatus == 'VM running' or properties.extended.instanceView.powerState.displayStatus == 'VM deallocated'\r\n| summarize count() by tostring(properties.extended.instanceView.powerState.displayStatus)",
+              "size": 1,
+              "title": "VMs by State",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "visualization": "tiles",
+              "tileSettings": {
+                "showBorder": false,
+                "titleContent": {
+                  "columnMatch": "properties_extended_instanceView_powerState_displayStatus",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "count_",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "auto"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                }
+              }
+            },
+            "customWidth": "25",
+            "name": "query - 0"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| summarize count() by tostring(properties.storageProfile.osDisk.osType)",
+              "size": 1,
+              "title": "VMs by Operating System",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "visualization": "tiles",
+              "tileSettings": {
+                "showBorder": false,
+                "titleContent": {
+                  "columnMatch": "properties_storageProfile_osDisk_osType",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "count_",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "auto"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                }
+              }
+            },
+            "customWidth": "25",
+            "name": "query - 1"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| summarize count() by tostring(properties.hardwareProfile.vmSize)",
+              "size": 1,
+              "title": "VMs by Size",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "visualization": "piechart"
+            },
+            "customWidth": "50",
+            "name": "query - 2"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| summarize count() by resourceGroup",
+              "size": 0,
+              "title": "VMs by Resource Group",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "visualization": "barchart"
+            },
+            "name": "query - 4"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| project [\"Resource Group\"]=resourceGroup,[\"VM Name\"]=name,[\"VM State\"]=properties.extended.instanceView.powerState.displayStatus,[\"Location\"]=location,[\"VM Size\"]=properties.hardwareProfile.vmSize,[\"Operating System\"]=properties.storageProfile.osDisk.osType,[\"Local Admin\"]=properties.osProfile.adminUsername",
+              "size": 0,
+              "title": "Virtual Machine Details",
+              "showExportToExcel": true,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true,
+                "sortBy": [
+                  {
+                    "itemKey": "Resource Group",
+                    "sortOrder": 1
+                  }
+                ]
+              },
+              "sortBy": [
+                {
+                  "itemKey": "Resource Group",
+                  "sortOrder": 1
+                }
+              ]
+            },
+            "name": "query - 5"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "Tab",
+        "comparison": "isEqualTo",
+        "value": "Virtual Machines"
+      },
+      "name": "Virtual Machines"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 1,
+            "content": {
+              "json": "# Azure Kubernetes Service\r\n\r\nThis section is dedicated to give an overall view and health of [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/intro-kubernetes) Clusters, Pods and Services."
+            },
+            "name": "text - 1"
+          },
+          {
+            "type": 9,
+            "content": {
+              "version": "KqlParameterItem/1.0",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "parameters": [
+                {
+                  "id": "d8254a88-6fd1-4c91-a120-38102e17c317",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "AKSCluster",
+                  "label": "AKS Cluster",
+                  "type": 5,
+                  "isRequired": true,
+                  "multiSelect": true,
+                  "quote": "'",
+                  "delimiter": ",",
+                  "query": "resources\r\n| where type == \"microsoft.containerservice/managedclusters\"\r\n| project id",
+                  "crossComponentResources": [
+                    "{Subscription}"
+                  ],
+                  "value": [],
+                  "typeSettings": {
+                    "additionalResourceOptions": [],
+                    "showDefault": false
+                  },
+                  "timeContext": {
+                    "durationMs": 86400000
+                  },
+                  "queryType": 1,
+                  "resourceType": "microsoft.resourcegraph/resources"
+                }
+              ],
+              "style": "pills",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources"
+            },
+            "name": "parameters - 3"
+          },
+          {
+            "type": 11,
+            "content": {
+              "version": "LinkItem/1.0",
+              "style": "tabs",
+              "links": [
+                {
+                  "id": "6a12e15a-9bae-449c-9ce5-7992f1807b0c",
+                  "cellValue": "SubTab",
+                  "linkTarget": "parameter",
+                  "linkLabel": "Clusters",
+                  "subTarget": "Clusters",
+                  "style": "link"
+                },
+                {
+                  "id": "cc911769-c1b8-48f3-9729-52747cf285f5",
+                  "cellValue": "SubTab",
+                  "linkTarget": "parameter",
+                  "linkLabel": "Pods",
+                  "subTarget": "Pods",
+                  "style": "link"
+                }
+              ]
+            },
+            "name": "links - 9"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "## AKS Clusters"
+                  },
+                  "name": "text - 0"
+                },
+                {
+                  "type": 10,
+                  "content": {
+                    "chartId": "workbooke27f54fa-03d4-4ff3-b021-3f43a0f0502f",
+                    "version": "MetricsItem/2.0",
+                    "size": 0,
+                    "chartType": -1,
+                    "resourceType": "microsoft.containerservice/managedclusters",
+                    "metricScope": 0,
+                    "resourceParameter": "AKSCluster",
+                    "resourceIds": [
+                      "{AKSCluster}"
+                    ],
+                    "timeContextFromParameter": "timerange",
+                    "timeContext": {
+                      "durationMs": 14400000
+                    },
+                    "metrics": [
+                      {
+                        "namespace": "insights.container/nodes",
+                        "metric": "insights.container/nodes--nodesCount",
+                        "aggregation": 4
+                      }
+                    ],
+                    "title": "Nodes per Cluster",
+                    "gridFormatType": 1,
+                    "tileSettings": {
+                      "titleContent": {
+                        "columnMatch": "Name",
+                        "formatter": 13,
+                        "formatOptions": {
+                          "showIcon": true
+                        }
+                      },
+                      "leftContent": {
+                        "columnMatch": "Value",
+                        "formatter": 12,
+                        "formatOptions": {
+                          "palette": "auto"
+                        },
+                        "numberFormat": {
+                          "unit": 17,
+                          "options": {
+                            "maximumSignificantDigits": 3,
+                            "maximumFractionDigits": 2
+                          }
+                        }
+                      },
+                      "showBorder": false
+                    },
+                    "gridSettings": {
+                      "rowLimit": 10000
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "metric - 5"
+                },
+                {
+                  "type": 10,
+                  "content": {
+                    "chartId": "workbook3b453519-1cdb-42c0-a6fb-9dac3adbcabd",
+                    "version": "MetricsItem/2.0",
+                    "size": 0,
+                    "chartType": -1,
+                    "resourceType": "microsoft.containerservice/managedclusters",
+                    "metricScope": 0,
+                    "resourceParameter": "AKSCluster",
+                    "resourceIds": [
+                      "{AKSCluster}"
+                    ],
+                    "timeContextFromParameter": "timerange",
+                    "timeContext": {
+                      "durationMs": 14400000
+                    },
+                    "metrics": [
+                      {
+                        "namespace": "insights.container/pods",
+                        "metric": "insights.container/pods--PodCount",
+                        "aggregation": 4
+                      }
+                    ],
+                    "title": "Pods per Cluster",
+                    "gridFormatType": 1,
+                    "tileSettings": {
+                      "showBorder": false,
+                      "titleContent": {
+                        "columnMatch": "Name",
+                        "formatter": 13
+                      },
+                      "leftContent": {
+                        "columnMatch": "Value",
+                        "formatter": 12,
+                        "formatOptions": {
+                          "palette": "auto"
+                        },
+                        "numberFormat": {
+                          "unit": 17,
+                          "options": {
+                            "maximumSignificantDigits": 3,
+                            "maximumFractionDigits": 2
+                          }
+                        }
+                      }
+                    },
+                    "gridSettings": {
+                      "rowLimit": 10000
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "metric - 7"
+                },
+                {
+                  "type": 10,
+                  "content": {
+                    "chartId": "workbook9c8f7743-f082-4f58-80ea-960599b502aa",
+                    "version": "MetricsItem/2.0",
+                    "size": 1,
+                    "chartType": 2,
+                    "resourceType": "microsoft.containerservice/managedclusters",
+                    "metricScope": 0,
+                    "resourceParameter": "AKSCluster",
+                    "resourceIds": [
+                      "{AKSCluster}"
+                    ],
+                    "timeContextFromParameter": "timerange",
+                    "timeContext": {
+                      "durationMs": 14400000
+                    },
+                    "metrics": [
+                      {
+                        "namespace": "insights.container/nodes",
+                        "metric": "insights.container/nodes--cpuUsagePercentage",
+                        "aggregation": 4,
+                        "splitBy": null
+                      }
+                    ],
+                    "title": "CPU % per Cluster",
+                    "gridSettings": {
+                      "rowLimit": 10000
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "metric - 4"
+                },
+                {
+                  "type": 10,
+                  "content": {
+                    "chartId": "workbook43c744d3-5ceb-4b46-8d1c-d584f6087e7f",
+                    "version": "MetricsItem/2.0",
+                    "size": 1,
+                    "chartType": 2,
+                    "resourceType": "microsoft.containerservice/managedclusters",
+                    "metricScope": 0,
+                    "resourceParameter": "AKSCluster",
+                    "resourceIds": [
+                      "{AKSCluster}"
+                    ],
+                    "timeContextFromParameter": "timerange",
+                    "timeContext": {
+                      "durationMs": 14400000
+                    },
+                    "metrics": [
+                      {
+                        "namespace": "insights.container/nodes",
+                        "metric": "insights.container/nodes--memoryWorkingSetPercentage",
+                        "aggregation": 4,
+                        "splitBy": null
+                      }
+                    ],
+                    "title": "Memory % per Cluster",
+                    "gridSettings": {
+                      "rowLimit": 10000
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "metric - 4"
+                },
+                {
+                  "type": 10,
+                  "content": {
+                    "chartId": "workbook5c1d01e1-0af5-45f2-9af8-7d9acc53bd78",
+                    "version": "MetricsItem/2.0",
+                    "size": 1,
+                    "chartType": 2,
+                    "resourceType": "microsoft.containerservice/managedclusters",
+                    "metricScope": 0,
+                    "resourceParameter": "AKSCluster",
+                    "resourceIds": [
+                      "{AKSCluster}"
+                    ],
+                    "timeContextFromParameter": "timerange",
+                    "timeContext": {
+                      "durationMs": 14400000
+                    },
+                    "metrics": [
+                      {
+                        "namespace": "insights.container/nodes",
+                        "metric": "insights.container/nodes--DiskUsedPercentage",
+                        "aggregation": 4,
+                        "splitBy": null
+                      }
+                    ],
+                    "title": "Disk Used % per Cluster",
+                    "gridSettings": {
+                      "rowLimit": 10000
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "metric - 6"
+                },
+                {
+                  "type": 10,
+                  "content": {
+                    "chartId": "workbookb794d8a2-89e5-4774-8b63-efc967b51d37",
+                    "version": "MetricsItem/2.0",
+                    "size": 1,
+                    "chartType": 2,
+                    "resourceType": "microsoft.containerservice/managedclusters",
+                    "metricScope": 0,
+                    "resourceParameter": "AKSCluster",
+                    "resourceIds": [
+                      "{AKSCluster}"
+                    ],
+                    "timeContext": {
+                      "durationMs": 3600000
+                    },
+                    "metrics": [
+                      {
+                        "namespace": "insights.container/nodes",
+                        "metric": "insights.container/nodes--memoryRssPercentage",
+                        "aggregation": 4,
+                        "splitBy": null
+                      }
+                    ],
+                    "title": "Memory Rss % per Cluster",
+                    "gridSettings": {
+                      "rowLimit": 10000
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "metric - 4"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.containerservice/managedclusters\" \r\n| where id in (dynamic([{AKSCluster}]))\r\n| extend dr = properties['agentPoolProfiles']\r\n| mv-expand dr\r\n| project [\"Resource Group\"]=resourceGroup,[\"Cluster Name\"]=name,[\"Kubernetes Version\"]=properties.kubernetesVersion,[\"Node Pool Name\"]=dr.name,[\"Auto Scalling\"]=dr.enableAutoScaling,[\"Virtual Machine OS\"]=dr.osType,[\"Virtual Machine Size\"]=dr.vmSize,[\"Current Nodes\"]=dr.[\"count\"],[\"Max Nodes\"]=dr.maxCount,[\"Min Nodes\"]=dr.minCount,[\"Location\"]=location,[\"Availability Zones\"]=zones,[\"API Server Address\"]=properties.fqdn",
+                    "size": 0,
+                    "title": "Kubernetes Clusters",
+                    "showExportToExcel": true,
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "visualization": "table",
+                    "gridSettings": {
+                      "formatters": [
+                        {
+                          "columnMatch": "Cluster Name",
+                          "formatter": 1
+                        },
+                        {
+                          "columnMatch": "Kubernetes Version",
+                          "formatter": 1
+                        },
+                        {
+                          "columnMatch": "Node Pool Name",
+                          "formatter": 1
+                        },
+                        {
+                          "columnMatch": "Virtual Machine OS",
+                          "formatter": 1
+                        },
+                        {
+                          "columnMatch": "Virtual Machine Size",
+                          "formatter": 1
+                        },
+                        {
+                          "columnMatch": "Current Nodes",
+                          "formatter": 1
+                        },
+                        {
+                          "columnMatch": "Max Nodes",
+                          "formatter": 1
+                        },
+                        {
+                          "columnMatch": "Min Nodes",
+                          "formatter": 1
+                        },
+                        {
+                          "columnMatch": "Auto Scalling",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "true",
+                                "representation": "success",
+                                "text": "Enable"
+                              },
+                              {
+                                "operator": "is Empty",
+                                "representation": "failed",
+                                "text": "Disable"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "false",
+                                "representation": "failed",
+                                "text": "Disable"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "failed",
+                                "text": "Disable"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "Location",
+                          "formatter": 1
+                        },
+                        {
+                          "columnMatch": "Availability Zones",
+                          "formatter": 1
+                        },
+                        {
+                          "columnMatch": "API Server Address",
+                          "formatter": 1
+                        },
+                        {
+                          "columnMatch": "Current Node Count",
+                          "formatter": 1
+                        },
+                        {
+                          "columnMatch": "Max Node Count",
+                          "formatter": 1
+                        },
+                        {
+                          "columnMatch": "Min Node Count",
+                          "formatter": 1
+                        }
+                      ],
+                      "rowLimit": 10000,
+                      "filter": true
+                    }
+                  },
+                  "name": "query - 0"
+                }
+              ]
+            },
+            "conditionalVisibility": {
+              "parameterName": "SubTab",
+              "comparison": "isEqualTo",
+              "value": "Clusters"
+            },
+            "name": "AKS-Cluster"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "## AKS Pods"
+                  },
+                  "name": "text - 1"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "let AKSCluster = dynamic([{AKSCluster}]);\r\nKubePodInventory \r\n| where Namespace != 'kube-system' and ClusterId in (AKSCluster)\r\n| summarize [\"Computers\"]=dcount(Computer) by [\"Pod\"]=Name",
+                    "size": 1,
+                    "title": "Nodes per Pod",
+                    "timeContext": {
+                      "durationMs": 14400000
+                    },
+                    "timeContextFromParameter": "timerange",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "crossComponentResources": [
+                      "{LogAnalyticsWorkspace}"
+                    ],
+                    "visualization": "tiles",
+                    "tileSettings": {
+                      "titleContent": {
+                        "columnMatch": "Pod",
+                        "formatter": 1
+                      },
+                      "leftContent": {
+                        "columnMatch": "Computers",
+                        "formatter": 12,
+                        "formatOptions": {
+                          "palette": "auto"
+                        },
+                        "numberFormat": {
+                          "unit": 17,
+                          "options": {
+                            "style": "decimal",
+                            "useGrouping": false,
+                            "maximumFractionDigits": 2,
+                            "maximumSignificantDigits": 3
+                          }
+                        },
+                        "tooltipFormat": {
+                          "tooltip": "Number of Nodes hosting that Pod"
+                        }
+                      },
+                      "showBorder": false
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "query - 5"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "let AKSCluster = dynamic([{AKSCluster}]);\r\nKubePodInventory \r\n| where Namespace != 'kube-system' and ClusterId in (AKSCluster)\r\n| summarize arg_max(TimeGenerated,PodRestartCount) by Name\r\n| project PodRestartCount, [\"Pod\"]=Name",
+                    "size": 1,
+                    "title": "Restart Count per Pod",
+                    "timeContext": {
+                      "durationMs": 14400000
+                    },
+                    "timeContextFromParameter": "timerange",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "crossComponentResources": [
+                      "{LogAnalyticsWorkspace}"
+                    ],
+                    "visualization": "tiles",
+                    "tileSettings": {
+                      "showBorder": false,
+                      "titleContent": {
+                        "columnMatch": "Pod",
+                        "formatter": 1
+                      },
+                      "leftContent": {
+                        "columnMatch": "PodRestartCount",
+                        "formatter": 12,
+                        "formatOptions": {
+                          "palette": "auto"
+                        },
+                        "numberFormat": {
+                          "unit": 17,
+                          "options": {
+                            "maximumSignificantDigits": 3,
+                            "maximumFractionDigits": 2
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "query - 5"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "let AKSCluster = dynamic([{AKSCluster}]);\r\nKubePodInventory\r\n| where ClusterId in (AKSCluster)\r\n| where PodIp contains '.'\r\n| summarize arg_max(TimeGenerated,PodRestartCount) by Name,ClusterName,Namespace,PodStatus,PodIp,PodStartTime\r\n| summarize arg_max(TimeGenerated, PodStatus) by ClusterName,Namespace,Name,PodIp,PodStartTime,\r\nPodRunningTime=(TimeGenerated - PodStartTime),PodRestartCount\r\n| project TimeGenerated,ClusterName, Namespace, Name, PodStatus, PodRestartCount ,PodRunningTime,PodIp",
+                    "size": 0,
+                    "title": "Pod Status",
+                    "timeContext": {
+                      "durationMs": 14400000
+                    },
+                    "timeContextFromParameter": "timerange",
+                    "showExportToExcel": true,
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "crossComponentResources": [
+                      "{LogAnalyticsWorkspace}"
+                    ],
+                    "gridSettings": {
+                      "formatters": [
+                        {
+                          "columnMatch": "PodStatus",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Terminating",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Running",
+                                "representation": "blue",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Pending",
+                                "representation": "yellow",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "rowLimit": 1000,
+                      "filter": true,
+                      "sortBy": [
+                        {
+                          "itemKey": "TimeGenerated",
+                          "sortOrder": 2
+                        }
+                      ],
+                      "labelSettings": [
+                        {
+                          "columnId": "TimeGenerated"
+                        },
+                        {
+                          "columnId": "ClusterName",
+                          "label": "Cluster Name"
+                        },
+                        {
+                          "columnId": "Namespace"
+                        },
+                        {
+                          "columnId": "Name",
+                          "label": "Pod name"
+                        },
+                        {
+                          "columnId": "PodStatus",
+                          "label": "Pod Status"
+                        },
+                        {
+                          "columnId": "PodIp",
+                          "label": "Pod IP"
+                        }
+                      ]
+                    },
+                    "sortBy": [
+                      {
+                        "itemKey": "TimeGenerated",
+                        "sortOrder": 2
+                      }
+                    ]
+                  },
+                  "name": "query - 0"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "KubeEvents \r\n| where ObjectKind == 'Pod'\r\n| summarize max(LastSeen),max(Count) by ClusterName,Namespace,Name, KubeEventType, Message\r\n| where max_LastSeen {timerange:value}\r\n| project max_LastSeen,ClusterName,Namespace,Name,KubeEventType,max_Count,Message\r\n| order by max_LastSeen desc ",
+                    "size": 0,
+                    "title": "Last Errors Events",
+                    "timeContext": {
+                      "durationMs": 14400000
+                    },
+                    "timeContextFromParameter": "timerange",
+                    "showExportToExcel": true,
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "crossComponentResources": [
+                      "{LogAnalyticsWorkspace}"
+                    ]
+                  },
+                  "name": "query - 2"
+                },
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "## Pod Log\r\n\r\nInsert Pod Name between \"quotes\""
+                  },
+                  "name": "text - 7"
+                },
+                {
+                  "type": 9,
+                  "content": {
+                    "version": "KqlParameterItem/1.0",
+                    "crossComponentResources": [
+                      "{LogAnalyticsWorkspace}"
+                    ],
+                    "parameters": [
+                      {
+                        "id": "2dc746aa-8e6e-48ab-8fc7-f8eac4cf54ee",
+                        "version": "KqlParameterItem/1.0",
+                        "name": "PodName",
+                        "type": 1,
+                        "value": "\"server-5b7dfdcccf-6zng6\"",
+                        "timeContext": {
+                          "durationMs": 14400000
+                        },
+                        "timeContextFromParameter": "timerange"
+                      }
+                    ],
+                    "style": "formHorizontal",
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces"
+                  },
+                  "name": "parameters - 6"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "let PodName = dynamic([{PodName}]);\r\nContainerLog\r\n| where TimeGenerated {timerange}\r\n| join kind=leftouter (\r\n    KubePodInventory\r\n    | where TimeGenerated {timerange}\r\n    | summarize by ContainerID,Name\r\n    ) on ContainerID\r\n| where Name1 in (PodName)\r\n| summarize by TimeGenerated,Name1,LogEntry\r\n| order by TimeGenerated desc",
+                    "size": 0,
+                    "timeContext": {
+                      "durationMs": 14400000
+                    },
+                    "timeContextFromParameter": "timerange",
+                    "showExportToExcel": true,
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "crossComponentResources": [
+                      "{LogAnalyticsWorkspace}"
+                    ],
+                    "gridSettings": {
+                      "formatters": [
+                        {
+                          "columnMatch": "LogEntry",
+                          "formatter": 0,
+                          "formatOptions": {
+                            "customColumnWidthSetting": "80%"
+                          }
+                        }
+                      ],
+                      "rowLimit": 500,
+                      "labelSettings": [
+                        {
+                          "columnId": "TimeGenerated"
+                        },
+                        {
+                          "columnId": "Name1",
+                          "label": "Pod Name"
+                        },
+                        {
+                          "columnId": "LogEntry"
+                        }
+                      ]
+                    }
+                  },
+                  "name": "query - 3"
+                }
+              ]
+            },
+            "conditionalVisibility": {
+              "parameterName": "SubTab",
+              "comparison": "isEqualTo",
+              "value": "Pods"
+            },
+            "name": "AKSPods"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "Tab",
+        "comparison": "isEqualTo",
+        "value": "AKS"
+      },
+      "name": "AKS"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 1,
+            "content": {
+              "json": "AzureXRay - **Version 0.1**",
+              "style": "info"
+            },
+            "name": "text - 6",
+            "styleSettings": {
+              "showBorder": true
+            }
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "*Disclaimer: The information provided in this workbook is provided 'as-is' and is intended for information purposes only. The information present at the workbook is licensed 'as-is'. You bear the risk of using it. The contributors give no express warranties, guarantees or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular purpose and non-infringement. Any feedback or improvements feel free to email me at: [Claudio Merola](mailto:merola@outlook.com).*",
+              "style": "warning"
+            },
+            "name": "text - 0"
+          }
+        ]
+      },
+      "name": "Disclaimer"
+    }
+  ],
+  "fallbackResourceIds": [
+    "Azure Monitor"
+  ],
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}
