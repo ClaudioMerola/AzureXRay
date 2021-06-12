@@ -16,9 +16,7 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "value": [
-              "value::all"
-            ],
+            "value": [],
             "typeSettings": {
               "additionalResourceOptions": [
                 "value::all"
@@ -1031,53 +1029,6 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": "let AKSCluster = dynamic([{AKSCluster}]);\r\nKubePodInventory \r\n| where Namespace != 'kube-system' and ClusterId in (AKSCluster)\r\n| summarize [\"Computers\"]=dcount(Computer) by [\"Pod\"]=Name",
-                    "size": 1,
-                    "title": "Nodes per Pod",
-                    "timeContext": {
-                      "durationMs": 14400000
-                    },
-                    "timeContextFromParameter": "timerange",
-                    "queryType": 0,
-                    "resourceType": "microsoft.operationalinsights/workspaces",
-                    "crossComponentResources": [
-                      "{LogAnalyticsWorkspace}"
-                    ],
-                    "visualization": "tiles",
-                    "tileSettings": {
-                      "titleContent": {
-                        "columnMatch": "Pod",
-                        "formatter": 1
-                      },
-                      "leftContent": {
-                        "columnMatch": "Computers",
-                        "formatter": 12,
-                        "formatOptions": {
-                          "palette": "auto"
-                        },
-                        "numberFormat": {
-                          "unit": 17,
-                          "options": {
-                            "style": "decimal",
-                            "useGrouping": false,
-                            "maximumFractionDigits": 2,
-                            "maximumSignificantDigits": 3
-                          }
-                        },
-                        "tooltipFormat": {
-                          "tooltip": "Number of Nodes hosting that Pod"
-                        }
-                      },
-                      "showBorder": false
-                    }
-                  },
-                  "customWidth": "50",
-                  "name": "query - 5"
-                },
-                {
-                  "type": 3,
-                  "content": {
-                    "version": "KqlItem/1.0",
                     "query": "let AKSCluster = dynamic([{AKSCluster}]);\r\nKubePodInventory \r\n| where Namespace != 'kube-system' and ClusterId in (AKSCluster)\r\n| summarize arg_max(TimeGenerated,PodRestartCount) by Name\r\n| project PodRestartCount, [\"Pod\"]=Name",
                     "size": 1,
                     "title": "Restart Count per Pod",
@@ -1113,7 +1064,7 @@
                       }
                     }
                   },
-                  "customWidth": "50",
+                  "customWidth": "100",
                   "name": "query - 5"
                 },
                 {
@@ -1233,7 +1184,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "## Pod Log\r\n\r\nInsert Pod Name between \"quotes\""
+                    "json": "## Pod Log\r\n\r\nInsert Pod Name below"
                   },
                   "name": "text - 7"
                 },
@@ -1250,7 +1201,7 @@
                         "version": "KqlParameterItem/1.0",
                         "name": "PodName",
                         "type": 1,
-                        "value": "\"server-5b7dfdcccf-6zng6\"",
+                        "value": "",
                         "timeContext": {
                           "durationMs": 14400000
                         },
@@ -1267,7 +1218,7 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": "let PodName = dynamic([{PodName}]);\r\nContainerLog\r\n| where TimeGenerated {timerange}\r\n| join kind=leftouter (\r\n    KubePodInventory\r\n    | where TimeGenerated {timerange}\r\n    | summarize by ContainerID,Name\r\n    ) on ContainerID\r\n| where Name1 in (PodName)\r\n| summarize by TimeGenerated,Name1,LogEntry\r\n| order by TimeGenerated desc",
+                    "query": "let PodName = @\"{PodName}\";\r\nContainerLog\r\n| where TimeGenerated {timerange}\r\n| join kind=leftouter (\r\n    KubePodInventory\r\n    | where TimeGenerated {timerange}\r\n    | summarize by ContainerID,Name\r\n    ) on ContainerID\r\n| where Name1 == PodName\r\n| summarize by TimeGenerated,Name1,LogEntry\r\n| order by TimeGenerated desc",
                     "size": 0,
                     "timeContext": {
                       "durationMs": 14400000
@@ -1333,7 +1284,7 @@
           {
             "type": 1,
             "content": {
-              "json": "AzureXRay - **Version 0.1**",
+              "json": "AzureXRay - **Version 0.1.2**",
               "style": "info"
             },
             "name": "text - 6",
