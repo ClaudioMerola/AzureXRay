@@ -16,7 +16,9 @@
             "multiSelect": true,
             "quote": "'",
             "delimiter": ",",
-            "value": [],
+            "value": [
+              "value::all"
+            ],
             "typeSettings": {
               "additionalResourceOptions": [
                 "value::all"
@@ -161,84 +163,18 @@
             "linkLabel": "Virtual Machines",
             "subTarget": "Virtual Machines",
             "style": "link"
+          },
+          {
+            "id": "09d80d03-14c3-4d30-8c41-b04298948227",
+            "cellValue": "Tab",
+            "linkTarget": "parameter",
+            "linkLabel": "Databases",
+            "subTarget": "Database",
+            "style": "link"
           }
         ]
       },
       "name": "links - 3"
-    },
-    {
-      "type": 12,
-      "content": {
-        "version": "NotebookGroup/1.0",
-        "groupType": "editable",
-        "items": [
-          {
-            "type": 1,
-            "content": {
-              "json": "# Performance Details"
-            },
-            "name": "text - 0"
-          },
-          {
-            "type": 12,
-            "content": {
-              "version": "NotebookGroup/1.0",
-              "groupType": "editable",
-              "items": [
-                {
-                  "type": 11,
-                  "content": {
-                    "version": "LinkItem/1.0",
-                    "style": "tabs",
-                    "links": [
-                      {
-                        "id": "87013799-9209-4a46-be9f-b78b5eb52096",
-                        "cellValue": "SubTab",
-                        "linkTarget": "parameter",
-                        "linkLabel": "Performance Overview",
-                        "subTarget": "Performance Overview",
-                        "style": "link"
-                      },
-                      {
-                        "id": "417c40e5-e4cb-438e-81ed-f87c88c035e5",
-                        "cellValue": "SubTab",
-                        "linkTarget": "parameter",
-                        "linkLabel": "Processor",
-                        "subTarget": "Processor",
-                        "style": "link"
-                      },
-                      {
-                        "id": "bd7682fe-ba6c-4865-9069-ea01d3c0ea5f",
-                        "cellValue": "SubTab",
-                        "linkTarget": "parameter",
-                        "linkLabel": "Memory",
-                        "subTarget": "Memory",
-                        "style": "link"
-                      },
-                      {
-                        "id": "fc7175c0-398e-42a7-96db-6af0fccf992c",
-                        "cellValue": "SubTab",
-                        "linkTarget": "parameter",
-                        "linkLabel": "Disk",
-                        "subTarget": "Disk",
-                        "style": "link"
-                      }
-                    ]
-                  },
-                  "name": "links - 0"
-                }
-              ]
-            },
-            "name": "PerfSubGroup"
-          }
-        ]
-      },
-      "conditionalVisibility": {
-        "parameterName": "Tab",
-        "comparison": "isEqualTo",
-        "value": "Performance"
-      },
-      "name": "Performance"
     },
     {
       "type": 12,
@@ -567,7 +503,7 @@
           {
             "type": 1,
             "content": {
-              "json": "# Azure Kubernetes Service\r\n\r\nThis section is dedicated to give an overall view and health of [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/intro-kubernetes) Clusters, Pods and Services."
+              "json": "<br>\r\n# Azure Kubernetes Service\r\n\r\nThis section is dedicated to give an overall view and health of [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/intro-kubernetes) Clusters, Pods and Services."
             },
             "name": "text - 1"
           },
@@ -612,6 +548,13 @@
             "name": "parameters - 3"
           },
           {
+            "type": 1,
+            "content": {
+              "json": "<br>"
+            },
+            "name": "text - 5"
+          },
+          {
             "type": 11,
             "content": {
               "version": "LinkItem/1.0",
@@ -646,120 +589,74 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "## AKS Clusters"
+                    "json": "<br>\r\n## AKS Clusters\r\n<br>"
                   },
                   "name": "text - 0"
                 },
                 {
-                  "type": 10,
+                  "type": 3,
                   "content": {
-                    "chartId": "workbooke27f54fa-03d4-4ff3-b021-3f43a0f0502f",
-                    "version": "MetricsItem/2.0",
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.containerservice/managedclusters\"\r\n| where id in (dynamic([{AKSCluster}]))\r\n| extend dr = properties['agentPoolProfiles']\r\n| mv-expand dr\r\n| project [\"Name\"]=name,[\"Current Nodes\"]=dr.[\"count\"]",
                     "size": 0,
-                    "chartType": -1,
-                    "resourceType": "microsoft.containerservice/managedclusters",
-                    "metricScope": 0,
-                    "resourceParameter": "AKSCluster",
-                    "resourceIds": [
-                      "{AKSCluster}"
-                    ],
-                    "timeContextFromParameter": "timerange",
-                    "timeContext": {
-                      "durationMs": 14400000
-                    },
-                    "metrics": [
-                      {
-                        "namespace": "insights.container/nodes",
-                        "metric": "insights.container/nodes--nodesCount",
-                        "aggregation": 4
-                      }
-                    ],
                     "title": "Nodes per Cluster",
-                    "gridFormatType": 1,
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "visualization": "tiles",
                     "tileSettings": {
                       "titleContent": {
                         "columnMatch": "Name",
-                        "formatter": 13,
-                        "formatOptions": {
-                          "showIcon": true
-                        }
+                        "formatter": 1
                       },
-                      "leftContent": {
-                        "columnMatch": "Value",
+                      "subtitleContent": {
+                        "columnMatch": "Current Nodes",
                         "formatter": 12,
                         "formatOptions": {
                           "palette": "auto"
-                        },
-                        "numberFormat": {
-                          "unit": 17,
-                          "options": {
-                            "maximumSignificantDigits": 3,
-                            "maximumFractionDigits": 2
-                          }
+                        }
+                      },
+                      "showBorder": false,
+                      "sortCriteriaField": "Current Nodes",
+                      "sortOrderField": 2,
+                      "size": "auto"
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "query - 7"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.containerservice/managedclusters\"\r\n| where id in (dynamic([{AKSCluster}]))\r\n| summarize Cont=dcount(name) by tostring(properties.kubernetesVersion)",
+                    "size": 0,
+                    "title": "Clusters per Version",
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "visualization": "tiles",
+                    "tileSettings": {
+                      "titleContent": {
+                        "columnMatch": "properties_kubernetesVersion",
+                        "formatter": 1
+                      },
+                      "subtitleContent": {
+                        "columnMatch": "Cont",
+                        "formatter": 12,
+                        "formatOptions": {
+                          "palette": "auto"
                         }
                       },
                       "showBorder": false
-                    },
-                    "gridSettings": {
-                      "rowLimit": 10000
                     }
                   },
                   "customWidth": "50",
-                  "name": "metric - 5"
-                },
-                {
-                  "type": 10,
-                  "content": {
-                    "chartId": "workbook3b453519-1cdb-42c0-a6fb-9dac3adbcabd",
-                    "version": "MetricsItem/2.0",
-                    "size": 0,
-                    "chartType": -1,
-                    "resourceType": "microsoft.containerservice/managedclusters",
-                    "metricScope": 0,
-                    "resourceParameter": "AKSCluster",
-                    "resourceIds": [
-                      "{AKSCluster}"
-                    ],
-                    "timeContextFromParameter": "timerange",
-                    "timeContext": {
-                      "durationMs": 14400000
-                    },
-                    "metrics": [
-                      {
-                        "namespace": "insights.container/pods",
-                        "metric": "insights.container/pods--PodCount",
-                        "aggregation": 4
-                      }
-                    ],
-                    "title": "Pods per Cluster",
-                    "gridFormatType": 1,
-                    "tileSettings": {
-                      "showBorder": false,
-                      "titleContent": {
-                        "columnMatch": "Name",
-                        "formatter": 13
-                      },
-                      "leftContent": {
-                        "columnMatch": "Value",
-                        "formatter": 12,
-                        "formatOptions": {
-                          "palette": "auto"
-                        },
-                        "numberFormat": {
-                          "unit": 17,
-                          "options": {
-                            "maximumSignificantDigits": 3,
-                            "maximumFractionDigits": 2
-                          }
-                        }
-                      }
-                    },
-                    "gridSettings": {
-                      "rowLimit": 10000
-                    }
-                  },
-                  "customWidth": "50",
-                  "name": "metric - 7"
+                  "name": "query - 7"
                 },
                 {
                   "type": 10,
@@ -921,6 +818,38 @@
                           "formatter": 1
                         },
                         {
+                          "columnMatch": "Auto Scalling",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "icons",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "true",
+                                "representation": "success",
+                                "text": "Enabled"
+                              },
+                              {
+                                "operator": "is Empty",
+                                "representation": "failed",
+                                "text": "Disabled"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "false",
+                                "representation": "failed",
+                                "text": "Disabled"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "failed",
+                                "text": "Disabled"
+                              }
+                            ]
+                          }
+                        },
+                        {
                           "columnMatch": "Virtual Machine OS",
                           "formatter": 1
                         },
@@ -939,38 +868,6 @@
                         {
                           "columnMatch": "Min Nodes",
                           "formatter": 1
-                        },
-                        {
-                          "columnMatch": "Auto Scalling",
-                          "formatter": 18,
-                          "formatOptions": {
-                            "thresholdsOptions": "icons",
-                            "thresholdsGrid": [
-                              {
-                                "operator": "==",
-                                "thresholdValue": "true",
-                                "representation": "success",
-                                "text": "Enable"
-                              },
-                              {
-                                "operator": "is Empty",
-                                "representation": "failed",
-                                "text": "Disable"
-                              },
-                              {
-                                "operator": "==",
-                                "thresholdValue": "false",
-                                "representation": "failed",
-                                "text": "Disable"
-                              },
-                              {
-                                "operator": "Default",
-                                "thresholdValue": null,
-                                "representation": "failed",
-                                "text": "Disable"
-                              }
-                            ]
-                          }
                         },
                         {
                           "columnMatch": "Location",
@@ -1021,7 +918,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "## AKS Pods"
+                    "json": "<br>\r\n## AKS Pods\r\n<br>"
                   },
                   "name": "text - 1"
                 },
@@ -1284,7 +1181,595 @@
           {
             "type": 1,
             "content": {
-              "json": "AzureXRay - **Version 0.1.2**",
+              "json": "# Databases"
+            },
+            "name": "text - 1"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "resources\r\n| where type == \"microsoft.sql/servers/databases\" or type == \"microsoft.dbformysql/servers\" or type == \"microsoft.dbforpostgresql/servers\" or type == \"microsoft.dbformariadb/servers\"\r\n| extend Database=replace(@'microsoft.sql/servers/databases',@'SQL Database',type)\r\n| extend Database1=replace(@'microsoft.dbformysql/servers',@'MySQL Database',Database)\r\n| extend Database2=replace(@'microsoft.dbforpostgresql/servers',@'DB for PostgreSQL',Database1)\r\n| extend Database3=replace(@'microsoft.dbformariadb/servers',@'MariaDB',Database2)\r\n| summarize count() by Database3",
+              "size": 0,
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscription}"
+              ],
+              "visualization": "tiles",
+              "tileSettings": {
+                "showBorder": false,
+                "titleContent": {
+                  "columnMatch": "Database3",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "count_",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "auto"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                }
+              },
+              "graphSettings": {
+                "type": 0,
+                "topContent": {
+                  "columnMatch": "Database3",
+                  "formatter": 1
+                },
+                "centerContent": {
+                  "columnMatch": "count_",
+                  "formatter": 1,
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                }
+              }
+            },
+            "name": "query - 3"
+          },
+          {
+            "type": 11,
+            "content": {
+              "version": "LinkItem/1.0",
+              "style": "tabs",
+              "links": [
+                {
+                  "id": "ab9bc889-bed1-47bb-acfc-b55bcdf1c456",
+                  "cellValue": "SubTab",
+                  "linkTarget": "parameter",
+                  "linkLabel": "SQL",
+                  "subTarget": "SQL",
+                  "preText": "SQL",
+                  "style": "link"
+                },
+                {
+                  "id": "15723e0e-f941-4c96-9781-3c0b1992c603",
+                  "cellValue": "SubTab",
+                  "linkTarget": "parameter",
+                  "linkLabel": "MySQL",
+                  "subTarget": "MySQL",
+                  "style": "link"
+                },
+                {
+                  "id": "6f189f7f-7f27-4c05-92bc-6238d6255da1",
+                  "cellValue": "SubTab",
+                  "linkTarget": "parameter",
+                  "linkLabel": "PostgreSQL",
+                  "subTarget": "PostgreSQL",
+                  "style": "link"
+                },
+                {
+                  "id": "69560e8c-5831-416f-8c6a-09de4fd38f49",
+                  "cellValue": "SubTab",
+                  "linkTarget": "parameter",
+                  "linkLabel": "MariaDB",
+                  "subTarget": "MariaDB",
+                  "style": "link"
+                }
+              ]
+            },
+            "name": "links - 0"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "## SQL"
+                  },
+                  "name": "text - 1"
+                },
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "#### SQL Servers"
+                  },
+                  "name": "text - 3"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.sql/servers\"\r\n| project [\"Resource Group\"]=resourceGroup,[\"SQL Server Name\"]=name,[\"Version\"]=properties.version,[\"Location\"]=location,[\"Internet Access\"]=properties.publicNetworkAccess,[\"Fully Qualified Domain Name\"]=properties.fullyQualifiedDomainName,[\"Admin\"]=properties.administratorLogin",
+                    "size": 0,
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "gridSettings": {
+                      "formatters": [
+                        {
+                          "columnMatch": "Internet Access",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Enabled",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "representation": "green",
+                                "text": "Disabled"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "name": "query - 4"
+                },
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "#### SQL Databases"
+                  },
+                  "name": "text - 2"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.sql/servers/databases\" and name != 'master'\r\n| project [\"Resource Group\"]=resourceGroup,[\"Database\"]=name,[\"Status\"]=properties.status,[\"SKU Tier\"]=sku.tier,[\"SKU Family\"]=sku.family,[\"DTU Capacity\"]=sku.capacity,[\"Max Size (GB)\"]=(((properties.maxSizeBytes)/1024)/1024)/1024,[\"Location\"]=location,[\"Storage Type\"]=properties.storageAccountType,[\"Collation\"]=properties.collation,[\"Zone Redundant\"]=properties.zoneRedundant",
+                    "size": 0,
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "gridSettings": {
+                      "formatters": [
+                        {
+                          "columnMatch": "Status",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Paused",
+                                "representation": "yellow",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Online",
+                                "representation": "blue",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "name": "query - 0"
+                }
+              ]
+            },
+            "conditionalVisibility": {
+              "parameterName": "SubTab",
+              "comparison": "isEqualTo",
+              "value": "SQL"
+            },
+            "name": "SQL"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "## MySQL"
+                  },
+                  "name": "text - 1"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.dbformysql/servers\"\r\n| project [\"Resource Group\"]=resourceGroup,[\"SQL Server Name\"]=name,[\"Version\"]=properties.version,[\"Location\"]=location,[\"SKU Tier\"]=sku.tier,[\"SKU Family\"]=sku.family,[\"DTU Capacity\"]=sku.capacity,[\"Internet Access\"]=properties.publicNetworkAccess,[\"Storage (GB)\"]=(properties.storageProfile.storageMB/1024),[\"Autogrow\"]=properties.storageProfile.storageAutogrow,[\"GeoRedundant\"]=properties.storageProfile.geoRedundantBackup,[\"Backup Retention (Days)\"]=properties.storageProfile.backupRetentionDays,[\"Encryption\"]=properties.infrastructureEncryption,[\"SSL\"]=properties.sslEnforcement,[\"Fully Qualified Domain Name\"]=properties.fullyQualifiedDomainName,[\"Admin\"]=properties.administratorLogin",
+                    "size": 0,
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "gridSettings": {
+                      "formatters": [
+                        {
+                          "columnMatch": "Internet Access",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Disabled",
+                                "representation": "blue",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Enabled",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "Autogrow",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Enabled",
+                                "representation": "blue",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Disabled",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "Encryption",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Enabled",
+                                "representation": "blue",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Disabled",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "SSL",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Enabled",
+                                "representation": "blue",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Disabled",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "name": "query - 0"
+                }
+              ]
+            },
+            "conditionalVisibility": {
+              "parameterName": "SubTab",
+              "comparison": "isEqualTo",
+              "value": "MySQL"
+            },
+            "name": "MySQL"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "## PostgreSQL"
+                  },
+                  "name": "text - 1"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.dbforpostgresql/servers\"\r\n| project [\"Resource Group\"]=resourceGroup,[\"SQL Server Name\"]=name,[\"Version\"]=properties.version,[\"Location\"]=location,[\"SKU Tier\"]=sku.tier,[\"SKU Family\"]=sku.family,[\"DTU Capacity\"]=sku.capacity,[\"Internet Access\"]=properties.publicNetworkAccess,[\"Storage (GB)\"]=(properties.storageProfile.storageMB/1024),[\"Autogrow\"]=properties.storageProfile.storageAutogrow,[\"GeoRedundant\"]=properties.storageProfile.geoRedundantBackup,[\"Backup Retention (Days)\"]=properties.storageProfile.backupRetentionDays,[\"Encryption\"]=properties.infrastructureEncryption,[\"SSL\"]=properties.sslEnforcement,[\"Fully Qualified Domain Name\"]=properties.fullyQualifiedDomainName,[\"Admin\"]=properties.administratorLogin",
+                    "size": 0,
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "gridSettings": {
+                      "formatters": [
+                        {
+                          "columnMatch": "Internet Access",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Disabled",
+                                "representation": "blue",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Enabled",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "Autogrow",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Enabled",
+                                "representation": "blue",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Disabled",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "GeoRedundant",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Enabled",
+                                "representation": "blue",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Disabled",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "Encryption",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Enabled",
+                                "representation": "blue",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Disabled",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "columnMatch": "SSL",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Enabled",
+                                "representation": "blue",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Disabled",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "name": "query - 0"
+                }
+              ]
+            },
+            "conditionalVisibility": {
+              "parameterName": "SubTab",
+              "comparison": "isEqualTo",
+              "value": "PostgreSQL"
+            },
+            "name": "PostgreSQL"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                  "type": 1,
+                  "content": {
+                    "json": "## MariaDB"
+                  },
+                  "name": "text - 0"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.dbformariadb/servers\"\r\n| project [\"Resource Group\"]=resourceGroup,[\"SQL Server Name\"]=name,[\"Version\"]=properties.version,[\"Location\"]=location,[\"SKU Tier\"]=sku.tier,[\"SKU Family\"]=sku.family,[\"DTU Capacity\"]=sku.capacity,[\"Internet Access\"]=properties.publicNetworkAccess,[\"Storage (GB)\"]=(properties.storageProfile.storageMB/1024),[\"Autogrow\"]=properties.storageProfile.storageAutogrow,[\"GeoRedundant\"]=properties.storageProfile.geoRedundantBackup,[\"Backup Retention (Days)\"]=properties.storageProfile.backupRetentionDays,[\"Encryption\"]=properties.infrastructureEncryption,[\"SSL\"]=properties.sslEnforcement,[\"Fully Qualified Domain Name\"]=properties.fullyQualifiedDomainName,[\"Admin\"]=properties.administratorLogin",
+                    "size": 0,
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ]
+                  },
+                  "name": "query - 1"
+                }
+              ]
+            },
+            "conditionalVisibility": {
+              "parameterName": "SubTab",
+              "comparison": "isEqualTo",
+              "value": "MariaDB"
+            },
+            "name": "MariaDB"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "Tab",
+        "comparison": "isEqualTo",
+        "value": "Database"
+      },
+      "name": "Databases"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 1,
+            "content": {
+              "json": "AzureXRay - **Version 0.1.3**",
               "style": "info"
             },
             "name": "text - 6",
