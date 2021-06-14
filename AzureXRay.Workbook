@@ -503,7 +503,7 @@
           {
             "type": 1,
             "content": {
-              "json": "<br>\r\n# Azure Kubernetes Service\r\n\r\nThis section is dedicated to give an overall view and health of [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/intro-kubernetes) Clusters, Pods and Services."
+              "json": "# Azure Kubernetes Service\r\n\r\nThis section is dedicated to give an overall view and health of [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/intro-kubernetes) Clusters, Pods and Services."
             },
             "name": "text - 1"
           },
@@ -589,7 +589,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "<br>\r\n## AKS Clusters\r\n<br>"
+                    "json": "<br>\r\n## Kubernetes clusters\r\n<br>\r\nFor more information access: [Azure Kubernetes Cluster Architecture](https://docs.microsoft.com/en-us/azure/aks/concepts-clusters-workloads#kubernetes-cluster-architecture)\r\n<br>"
                   },
                   "name": "text - 0"
                 },
@@ -598,7 +598,7 @@
                   "content": {
                     "version": "KqlItem/1.0",
                     "query": "resources\r\n| where type == \"microsoft.containerservice/managedclusters\"\r\n| where id in (dynamic([{AKSCluster}]))\r\n| extend dr = properties['agentPoolProfiles']\r\n| mv-expand dr\r\n| project [\"Name\"]=name,[\"Current Nodes\"]=dr.[\"count\"]",
-                    "size": 0,
+                    "size": 1,
                     "title": "Nodes per Cluster",
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
@@ -632,7 +632,7 @@
                   "content": {
                     "version": "KqlItem/1.0",
                     "query": "resources\r\n| where type == \"microsoft.containerservice/managedclusters\"\r\n| where id in (dynamic([{AKSCluster}]))\r\n| summarize Cont=dcount(name) by tostring(properties.kubernetesVersion)",
-                    "size": 0,
+                    "size": 1,
                     "title": "Clusters per Version",
                     "queryType": 1,
                     "resourceType": "microsoft.resourcegraph/resources",
@@ -918,7 +918,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "<br>\r\n## AKS Pods\r\n<br>"
+                    "json": "<br>\r\n## AKS Pods\r\n<br>\r\nFor more information access: [Azure Kubernetes Pods](https://docs.microsoft.com/en-us/azure/aks/concepts-clusters-workloads#pods)"
                   },
                   "name": "text - 1"
                 },
@@ -927,10 +927,10 @@
                   "content": {
                     "version": "KqlItem/1.0",
                     "query": "let AKSCluster = dynamic([{AKSCluster}]);\r\nKubePodInventory \r\n| where Namespace != 'kube-system' and ClusterId in (AKSCluster)\r\n| summarize arg_max(TimeGenerated,PodRestartCount) by Name\r\n| project PodRestartCount, [\"Pod\"]=Name",
-                    "size": 1,
+                    "size": 2,
                     "title": "Restart Count per Pod",
                     "timeContext": {
-                      "durationMs": 14400000
+                      "durationMs": 0
                     },
                     "timeContextFromParameter": "timerange",
                     "queryType": 0,
@@ -940,7 +940,6 @@
                     ],
                     "visualization": "tiles",
                     "tileSettings": {
-                      "showBorder": false,
                       "titleContent": {
                         "columnMatch": "Pod",
                         "formatter": 1
@@ -958,11 +957,36 @@
                             "maximumFractionDigits": 2
                           }
                         }
-                      }
+                      },
+                      "showBorder": false,
+                      "sortCriteriaField": "PodRestartCount",
+                      "sortOrderField": 2
                     }
                   },
-                  "customWidth": "100",
                   "name": "query - 5"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "KubeEvents \r\n| where ObjectKind == 'Pod'\r\n| summarize max(LastSeen),max(Count) by ClusterName,Namespace,Name, KubeEventType, Message\r\n| where max_LastSeen {timerange:value}\r\n| project max_LastSeen,ClusterName,Namespace,Name,KubeEventType,max_Count,Message\r\n| order by max_LastSeen desc ",
+                    "size": 0,
+                    "title": "Last Errors Events",
+                    "timeContext": {
+                      "durationMs": 0
+                    },
+                    "timeContextFromParameter": "timerange",
+                    "exportFieldName": "Name",
+                    "exportParameterName": "PodName",
+                    "exportDefaultValue": " ",
+                    "showExportToExcel": true,
+                    "queryType": 0,
+                    "resourceType": "microsoft.operationalinsights/workspaces",
+                    "crossComponentResources": [
+                      "{LogAnalyticsWorkspace}"
+                    ]
+                  },
+                  "name": "query - 2"
                 },
                 {
                   "type": 3,
@@ -972,9 +996,12 @@
                     "size": 0,
                     "title": "Pod Status",
                     "timeContext": {
-                      "durationMs": 14400000
+                      "durationMs": 0
                     },
                     "timeContextFromParameter": "timerange",
+                    "exportFieldName": "Name",
+                    "exportParameterName": "PodName",
+                    "exportDefaultValue": " ",
                     "showExportToExcel": true,
                     "queryType": 0,
                     "resourceType": "microsoft.operationalinsights/workspaces",
@@ -1059,68 +1086,23 @@
                   "name": "query - 0"
                 },
                 {
-                  "type": 3,
-                  "content": {
-                    "version": "KqlItem/1.0",
-                    "query": "KubeEvents \r\n| where ObjectKind == 'Pod'\r\n| summarize max(LastSeen),max(Count) by ClusterName,Namespace,Name, KubeEventType, Message\r\n| where max_LastSeen {timerange:value}\r\n| project max_LastSeen,ClusterName,Namespace,Name,KubeEventType,max_Count,Message\r\n| order by max_LastSeen desc ",
-                    "size": 0,
-                    "title": "Last Errors Events",
-                    "timeContext": {
-                      "durationMs": 14400000
-                    },
-                    "timeContextFromParameter": "timerange",
-                    "showExportToExcel": true,
-                    "queryType": 0,
-                    "resourceType": "microsoft.operationalinsights/workspaces",
-                    "crossComponentResources": [
-                      "{LogAnalyticsWorkspace}"
-                    ]
-                  },
-                  "name": "query - 2"
-                },
-                {
                   "type": 1,
                   "content": {
-                    "json": "## Pod Log\r\n\r\nInsert Pod Name below"
+                    "json": "<br>\r\n## Pod Log"
                   },
                   "name": "text - 7"
                 },
                 {
-                  "type": 9,
-                  "content": {
-                    "version": "KqlParameterItem/1.0",
-                    "crossComponentResources": [
-                      "{LogAnalyticsWorkspace}"
-                    ],
-                    "parameters": [
-                      {
-                        "id": "2dc746aa-8e6e-48ab-8fc7-f8eac4cf54ee",
-                        "version": "KqlParameterItem/1.0",
-                        "name": "PodName",
-                        "type": 1,
-                        "value": "",
-                        "timeContext": {
-                          "durationMs": 14400000
-                        },
-                        "timeContextFromParameter": "timerange"
-                      }
-                    ],
-                    "style": "formHorizontal",
-                    "queryType": 0,
-                    "resourceType": "microsoft.operationalinsights/workspaces"
-                  },
-                  "name": "parameters - 6"
-                },
-                {
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": "let PodName = @\"{PodName}\";\r\nContainerLog\r\n| where TimeGenerated {timerange}\r\n| join kind=leftouter (\r\n    KubePodInventory\r\n    | where TimeGenerated {timerange}\r\n    | summarize by ContainerID,Name\r\n    ) on ContainerID\r\n| where Name1 == PodName\r\n| summarize by TimeGenerated,Name1,LogEntry\r\n| order by TimeGenerated desc",
+                    "query": "let PodName1 = @\"{PodName}\";\r\nContainerLog\r\n| where TimeGenerated {timerange}\r\n| join kind=leftouter (\r\n    KubePodInventory\r\n    | where TimeGenerated {timerange}\r\n    | summarize by ContainerID,Name\r\n    ) on ContainerID\r\n| where Name1 == PodName1\r\n| summarize by TimeGenerated,Name1,LogEntry\r\n| order by TimeGenerated desc",
                     "size": 0,
                     "timeContext": {
-                      "durationMs": 14400000
+                      "durationMs": 0
                     },
                     "timeContextFromParameter": "timerange",
+                    "showRefreshButton": true,
                     "showExportToExcel": true,
                     "queryType": 0,
                     "resourceType": "microsoft.operationalinsights/workspaces",
@@ -1190,7 +1172,7 @@
             "content": {
               "version": "KqlItem/1.0",
               "query": "resources\r\n| where type == \"microsoft.sql/servers/databases\" or type == \"microsoft.dbformysql/servers\" or type == \"microsoft.dbforpostgresql/servers\" or type == \"microsoft.dbformariadb/servers\"\r\n| extend Database=replace(@'microsoft.sql/servers/databases',@'SQL Database',type)\r\n| extend Database1=replace(@'microsoft.dbformysql/servers',@'MySQL Database',Database)\r\n| extend Database2=replace(@'microsoft.dbforpostgresql/servers',@'DB for PostgreSQL',Database1)\r\n| extend Database3=replace(@'microsoft.dbformariadb/servers',@'MariaDB',Database2)\r\n| summarize count() by Database3",
-              "size": 0,
+              "size": 4,
               "queryType": 1,
               "resourceType": "microsoft.resourcegraph/resources",
               "crossComponentResources": [
@@ -1198,7 +1180,6 @@
               ],
               "visualization": "tiles",
               "tileSettings": {
-                "showBorder": false,
                 "titleContent": {
                   "columnMatch": "Database3",
                   "formatter": 1
@@ -1216,7 +1197,10 @@
                       "maximumFractionDigits": 2
                     }
                   }
-                }
+                },
+                "showBorder": false,
+                "sortCriteriaField": "count_",
+                "sortOrderField": 2
               },
               "graphSettings": {
                 "type": 0,
@@ -1769,7 +1753,7 @@
           {
             "type": 1,
             "content": {
-              "json": "AzureXRay - **Version 0.1.3**",
+              "json": "AzureXRay - **Version 0.1.4**",
               "style": "info"
             },
             "name": "text - 6",
