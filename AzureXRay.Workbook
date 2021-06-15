@@ -171,6 +171,14 @@
             "linkLabel": "Databases",
             "subTarget": "Database",
             "style": "link"
+          },
+          {
+            "id": "5e240dbe-3389-4585-83c6-16052251368a",
+            "cellValue": "Tab",
+            "linkTarget": "parameter",
+            "linkLabel": "Azure Firewall",
+            "subTarget": "Azure Firewall",
+            "style": "link"
           }
         ]
       },
@@ -930,7 +938,7 @@
                     "size": 2,
                     "title": "Restart Count per Pod",
                     "timeContext": {
-                      "durationMs": 0
+                      "durationMs": 3600000
                     },
                     "timeContextFromParameter": "timerange",
                     "queryType": 0,
@@ -973,7 +981,7 @@
                     "size": 0,
                     "title": "Last Errors Events",
                     "timeContext": {
-                      "durationMs": 0
+                      "durationMs": 3600000
                     },
                     "timeContextFromParameter": "timerange",
                     "exportFieldName": "Name",
@@ -996,7 +1004,7 @@
                     "size": 0,
                     "title": "Pod Status",
                     "timeContext": {
-                      "durationMs": 0
+                      "durationMs": 3600000
                     },
                     "timeContextFromParameter": "timerange",
                     "exportFieldName": "Name",
@@ -1088,7 +1096,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "<br>\r\n## Pod Log"
+                    "json": "<br>"
                   },
                   "name": "text - 7"
                 },
@@ -1098,6 +1106,7 @@
                     "version": "KqlItem/1.0",
                     "query": "let PodName1 = @\"{PodName}\";\r\nContainerLog\r\n| where TimeGenerated {timerange}\r\n| join kind=leftouter (\r\n    KubePodInventory\r\n    | where TimeGenerated {timerange}\r\n    | summarize by ContainerID,Name\r\n    ) on ContainerID\r\n| where Name1 == PodName1\r\n| summarize by TimeGenerated,Name1,LogEntry\r\n| order by TimeGenerated desc",
                     "size": 0,
+                    "title": "Pod Log",
                     "timeContext": {
                       "durationMs": 0
                     },
@@ -1743,6 +1752,95 @@
         "value": "Database"
       },
       "name": "Databases"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 1,
+            "content": {
+              "json": "# Azure Firewall"
+            },
+            "name": "text - 1"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "resources\r\n| where type == \"microsoft.network/azurefirewalls\"\r\n| join kind=leftouter (resources\r\n\t| where type == \"microsoft.network/azurefirewalls\"\r\n\t| extend rul=properties.natRuleCollections\r\n\t| mv-expand rul\r\n\t| extend rul2=rul.properties.rules\r\n\t| mv-expand rul2\r\n\t| summarize NATCount=count(rul2.name) by id)\r\n\ton $left.id == $right.id\r\n| join kind=leftouter (resources\r\n\t| where type == \"microsoft.network/azurefirewalls\"\r\n\t| extend rul=properties.firewallPolicy\r\n\t| mv-expand rul\r\n\t| summarize POLCount=count(rul.id) by id)\r\n\ton $left.id == $right.id\r\n| join kind=leftouter (resources\r\n\t| where type == \"microsoft.network/azurefirewalls\"\r\n\t| extend rul=properties.networkRuleCollections\r\n\t| mv-expand rul\r\n\t| summarize NETCount=count(rul.id) by id)\r\n\ton $left.id == $right.id\r\n| project[\"Resource Group\"]=resourceGroup,[\"Name\"]=name,[\"Location\"]=location,[\"SKU\"]=tostring(properties.sku.tier),NATCount,POLCount,NETCount",
+              "size": 0,
+              "title": "Azure Firewalls",
+              "exportFieldName": "name",
+              "exportParameterName": "AzFW",
+              "queryType": 1,
+              "resourceType": "microsoft.resourcegraph/resources",
+              "crossComponentResources": [
+                "{Subscription}"
+              ]
+            },
+            "name": "query - 0"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "AzureDiagnostics \r\n| where ResourceType == 'AZUREFIREWALLS'\r\n| project TimeGenerated,Resource,Category,msg_s\r\n| order by TimeGenerated desc",
+              "size": 0,
+              "title": "Firewall Log",
+              "timeContext": {
+                "durationMs": 0
+              },
+              "timeContextFromParameter": "timerange",
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspace}"
+              ],
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "msg_s",
+                    "formatter": 0,
+                    "formatOptions": {
+                      "customColumnWidthSetting": "70%"
+                    }
+                  }
+                ],
+                "rowLimit": 500,
+                "filter": true,
+                "labelSettings": [
+                  {
+                    "columnId": "TimeGenerated"
+                  },
+                  {
+                    "columnId": "Resource",
+                    "label": "Firewall"
+                  },
+                  {
+                    "columnId": "Category",
+                    "label": "Log Category"
+                  },
+                  {
+                    "columnId": "msg_s",
+                    "label": "Message"
+                  }
+                ]
+              }
+            },
+            "name": "query - 2"
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "Tab",
+        "comparison": "isEqualTo",
+        "value": "Azure Firewall"
+      },
+      "name": "AzFirewall"
     },
     {
       "type": 12,
