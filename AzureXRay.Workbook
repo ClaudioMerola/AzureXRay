@@ -87,7 +87,7 @@
             "label": "Time Range",
             "type": 4,
             "value": {
-              "durationMs": 14400000
+              "durationMs": 86400000
             },
             "typeSettings": {
               "selectableValues": [
@@ -211,7 +211,7 @@
                     "size": 1,
                     "title": "Current Sign-In",
                     "timeContext": {
-                      "durationMs": 14400000
+                      "durationMs": 86400000
                     },
                     "timeContextFromParameter": "timerange",
                     "queryType": 0,
@@ -231,7 +231,7 @@
                     "size": 1,
                     "title": "Daily Sign-In",
                     "timeContext": {
-                      "durationMs": 14400000
+                      "durationMs": 86400000
                     },
                     "timeContextFromParameter": "timerange",
                     "queryType": 0,
@@ -252,7 +252,7 @@
                     "size": 2,
                     "title": "Sign-In Heat Map",
                     "timeContext": {
-                      "durationMs": 14400000
+                      "durationMs": 86400000
                     },
                     "timeContextFromParameter": "timerange",
                     "queryType": 0,
@@ -288,7 +288,7 @@
                     "showAnalytics": true,
                     "title": "Sign-In Details",
                     "timeContext": {
-                      "durationMs": 14400000
+                      "durationMs": 86400000
                     },
                     "timeContextFromParameter": "timerange",
                     "showExportToExcel": true,
@@ -353,145 +353,332 @@
             "name": "text - 3"
           },
           {
-            "type": 3,
+            "type": 11,
             "content": {
-              "version": "KqlItem/1.0",
-              "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| where properties.extended.instanceView.powerState.displayStatus == 'VM running' or properties.extended.instanceView.powerState.displayStatus == 'VM deallocated'\r\n| summarize count() by tostring(properties.extended.instanceView.powerState.displayStatus)",
-              "size": 1,
-              "title": "VMs by State",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources",
-              "crossComponentResources": [
-                "{Subscription}"
-              ],
-              "visualization": "tiles",
-              "tileSettings": {
-                "showBorder": false,
-                "titleContent": {
-                  "columnMatch": "properties_extended_instanceView_powerState_displayStatus",
-                  "formatter": 1
-                },
-                "leftContent": {
-                  "columnMatch": "count_",
-                  "formatter": 12,
-                  "formatOptions": {
-                    "palette": "auto"
-                  },
-                  "numberFormat": {
-                    "unit": 17,
-                    "options": {
-                      "maximumSignificantDigits": 3,
-                      "maximumFractionDigits": 2
-                    }
-                  }
-                }
-              }
-            },
-            "customWidth": "25",
-            "name": "query - 0"
-          },
-          {
-            "type": 3,
-            "content": {
-              "version": "KqlItem/1.0",
-              "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| summarize count() by tostring(properties.storageProfile.osDisk.osType)",
-              "size": 1,
-              "title": "VMs by Operating System",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources",
-              "crossComponentResources": [
-                "{Subscription}"
-              ],
-              "visualization": "tiles",
-              "tileSettings": {
-                "showBorder": false,
-                "titleContent": {
-                  "columnMatch": "properties_storageProfile_osDisk_osType",
-                  "formatter": 1
-                },
-                "leftContent": {
-                  "columnMatch": "count_",
-                  "formatter": 12,
-                  "formatOptions": {
-                    "palette": "auto"
-                  },
-                  "numberFormat": {
-                    "unit": 17,
-                    "options": {
-                      "maximumSignificantDigits": 3,
-                      "maximumFractionDigits": 2
-                    }
-                  }
-                }
-              }
-            },
-            "customWidth": "25",
-            "name": "query - 1"
-          },
-          {
-            "type": 3,
-            "content": {
-              "version": "KqlItem/1.0",
-              "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| summarize count() by tostring(properties.hardwareProfile.vmSize)",
-              "size": 1,
-              "title": "VMs by Size",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources",
-              "crossComponentResources": [
-                "{Subscription}"
-              ],
-              "visualization": "piechart"
-            },
-            "customWidth": "50",
-            "name": "query - 2"
-          },
-          {
-            "type": 3,
-            "content": {
-              "version": "KqlItem/1.0",
-              "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| summarize count() by resourceGroup",
-              "size": 0,
-              "title": "VMs by Resource Group",
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources",
-              "crossComponentResources": [
-                "{Subscription}"
-              ],
-              "visualization": "barchart"
-            },
-            "name": "query - 4"
-          },
-          {
-            "type": 3,
-            "content": {
-              "version": "KqlItem/1.0",
-              "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| project [\"Resource Group\"]=resourceGroup,[\"VM Name\"]=name,[\"VM State\"]=properties.extended.instanceView.powerState.displayStatus,[\"Location\"]=location,[\"VM Size\"]=properties.hardwareProfile.vmSize,[\"Operating System\"]=properties.storageProfile.osDisk.osType,[\"Local Admin\"]=properties.osProfile.adminUsername",
-              "size": 0,
-              "title": "Virtual Machine Details",
-              "showExportToExcel": true,
-              "queryType": 1,
-              "resourceType": "microsoft.resourcegraph/resources",
-              "crossComponentResources": [
-                "{Subscription}"
-              ],
-              "gridSettings": {
-                "rowLimit": 10000,
-                "filter": true,
-                "sortBy": [
-                  {
-                    "itemKey": "Resource Group",
-                    "sortOrder": 1
-                  }
-                ]
-              },
-              "sortBy": [
+              "version": "LinkItem/1.0",
+              "style": "tabs",
+              "links": [
                 {
-                  "itemKey": "Resource Group",
-                  "sortOrder": 1
+                  "id": "670b43a6-84d2-4d6c-95f6-709d725090f1",
+                  "cellValue": "SubTab",
+                  "linkTarget": "parameter",
+                  "linkLabel": "Virtual Machines",
+                  "subTarget": "Virtual Machines",
+                  "preText": "Virtual Machines",
+                  "postText": "Virtual ",
+                  "style": "link"
+                },
+                {
+                  "id": "b6570952-10ee-4894-8113-b85e0d8c55f5",
+                  "cellValue": "SubTab",
+                  "linkTarget": "parameter",
+                  "linkLabel": "VM Disks",
+                  "subTarget": "VM Disks",
+                  "style": "link"
                 }
               ]
             },
-            "name": "query - 5"
+            "name": "links - 1"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| summarize count() by tostring(properties.extended.instanceView.powerState.displayStatus)",
+                    "size": 1,
+                    "title": "VMs by State",
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "visualization": "tiles",
+                    "tileSettings": {
+                      "showBorder": false,
+                      "titleContent": {
+                        "columnMatch": "properties_extended_instanceView_powerState_displayStatus",
+                        "formatter": 1
+                      },
+                      "leftContent": {
+                        "columnMatch": "count_",
+                        "formatter": 12,
+                        "formatOptions": {
+                          "palette": "auto"
+                        },
+                        "numberFormat": {
+                          "unit": 17,
+                          "options": {
+                            "maximumSignificantDigits": 3,
+                            "maximumFractionDigits": 2
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "customWidth": "25",
+                  "name": "query - 0"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| summarize count() by tostring(properties.storageProfile.osDisk.osType)",
+                    "size": 1,
+                    "title": "VMs by Operating System",
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "visualization": "tiles",
+                    "tileSettings": {
+                      "showBorder": false,
+                      "titleContent": {
+                        "columnMatch": "properties_storageProfile_osDisk_osType",
+                        "formatter": 1
+                      },
+                      "leftContent": {
+                        "columnMatch": "count_",
+                        "formatter": 12,
+                        "formatOptions": {
+                          "palette": "auto"
+                        },
+                        "numberFormat": {
+                          "unit": 17,
+                          "options": {
+                            "maximumSignificantDigits": 3,
+                            "maximumFractionDigits": 2
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "customWidth": "25",
+                  "name": "query - 1"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| summarize count() by tostring(properties.hardwareProfile.vmSize)",
+                    "size": 1,
+                    "title": "VMs by Size",
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "visualization": "piechart"
+                  },
+                  "customWidth": "50",
+                  "name": "query - 2"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| summarize count() by resourceGroup",
+                    "size": 0,
+                    "title": "VMs by Resource Group",
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "visualization": "barchart"
+                  },
+                  "name": "query - 4"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.compute/virtualmachines\"\r\n| project [\"Resource Group\"]=resourceGroup,[\"VM Name\"]=name,[\"VM State\"]=properties.extended.instanceView.powerState.displayStatus,[\"Location\"]=location,[\"VM Size\"]=properties.hardwareProfile.vmSize,[\"Operating System\"]=properties.storageProfile.osDisk.osType,[\"Local Admin\"]=properties.osProfile.adminUsername",
+                    "size": 0,
+                    "title": "Virtual Machine Details",
+                    "showExportToExcel": true,
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "gridSettings": {
+                      "rowLimit": 10000,
+                      "filter": true,
+                      "sortBy": [
+                        {
+                          "itemKey": "Resource Group",
+                          "sortOrder": 1
+                        }
+                      ]
+                    },
+                    "sortBy": [
+                      {
+                        "itemKey": "Resource Group",
+                        "sortOrder": 1
+                      }
+                    ]
+                  },
+                  "name": "query - 5"
+                }
+              ]
+            },
+            "conditionalVisibility": {
+              "parameterName": "SubTab",
+              "comparison": "isEqualTo",
+              "value": "Virtual Machines"
+            },
+            "name": "VMs"
+          },
+          {
+            "type": 12,
+            "content": {
+              "version": "NotebookGroup/1.0",
+              "groupType": "editable",
+              "items": [
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.compute/disks\" \r\n| summarize count() by tostring(properties.diskState)",
+                    "size": 0,
+                    "title": "Disks by State",
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "visualization": "tiles",
+                    "tileSettings": {
+                      "titleContent": {
+                        "columnMatch": "properties_diskState",
+                        "formatter": 1
+                      },
+                      "leftContent": {
+                        "columnMatch": "count_",
+                        "formatter": 12,
+                        "formatOptions": {
+                          "palette": "hotCold"
+                        },
+                        "numberFormat": {
+                          "unit": 17,
+                          "options": {
+                            "style": "decimal",
+                            "maximumFractionDigits": 2,
+                            "maximumSignificantDigits": 3
+                          }
+                        }
+                      },
+                      "showBorder": false
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "query - 4"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.compute/disks\"\r\n| where isnotnull(properties.tier)\r\n| summarize count() by tostring(properties.tier)",
+                    "size": 0,
+                    "title": "Disks by Tier",
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "visualization": "tiles",
+                    "tileSettings": {
+                      "titleContent": {
+                        "columnMatch": "properties_tier",
+                        "formatter": 1
+                      },
+                      "leftContent": {
+                        "columnMatch": "count_",
+                        "formatter": 12,
+                        "formatOptions": {
+                          "palette": "auto"
+                        },
+                        "numberFormat": {
+                          "unit": 17,
+                          "options": {
+                            "style": "decimal",
+                            "maximumFractionDigits": 2,
+                            "maximumSignificantDigits": 3
+                          },
+                          "emptyValCustomText": "P0"
+                        }
+                      },
+                      "showBorder": false
+                    }
+                  },
+                  "customWidth": "50",
+                  "name": "query - 5"
+                },
+                {
+                  "type": 3,
+                  "content": {
+                    "version": "KqlItem/1.0",
+                    "query": "resources\r\n| where type == \"microsoft.compute/disks\" \r\n| project [\"Resource Group\"]=resourceGroup, [\"Disk Name\"]=name, [\"Location\"]=location, [\"Disk State\"]=properties.diskState, [\"Disk Size (GB)\"]=properties.diskSizeGB, [\"Disk IOPS Limit\"]=properties.diskIOPSReadWrite, [\"Disk MBps\"]=properties.diskMBpsReadWrite",
+                    "size": 0,
+                    "queryType": 1,
+                    "resourceType": "microsoft.resourcegraph/resources",
+                    "crossComponentResources": [
+                      "{Subscription}"
+                    ],
+                    "gridSettings": {
+                      "formatters": [
+                        {
+                          "columnMatch": "Disk State",
+                          "formatter": 18,
+                          "formatOptions": {
+                            "thresholdsOptions": "colors",
+                            "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Attached",
+                                "representation": "blue",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Reserved",
+                                "representation": "yellow",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Unattached",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
+                              {
+                                "operator": "Default",
+                                "thresholdValue": null,
+                                "text": "{0}{1}"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "name": "query - 1"
+                }
+              ]
+            },
+            "conditionalVisibility": {
+              "parameterName": "SubTab",
+              "comparison": "isEqualTo",
+              "value": "VM Disks"
+            },
+            "name": "Disk"
           }
         ]
       },
@@ -511,7 +698,7 @@
           {
             "type": 1,
             "content": {
-              "json": "# Azure Kubernetes Service\r\n\r\nThis section is dedicated to give an overall view and health of [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/intro-kubernetes) Clusters, Pods and Services."
+              "json": "# Azure Kubernetes Service\r\n<br>\r\nThis section is dedicated to give an overall view and health of [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/intro-kubernetes) Clusters, Pods and Services.\r\n<br>\r\n<br>\r\n<br>"
             },
             "name": "text - 1"
           },
@@ -549,11 +736,14 @@
                   "resourceType": "microsoft.resourcegraph/resources"
                 }
               ],
-              "style": "pills",
+              "style": "formHorizontal",
               "queryType": 1,
               "resourceType": "microsoft.resourcegraph/resources"
             },
-            "name": "parameters - 3"
+            "name": "parameters - 3",
+            "styleSettings": {
+              "maxWidth": "40%"
+            }
           },
           {
             "type": 1,
@@ -681,7 +871,7 @@
                     ],
                     "timeContextFromParameter": "timerange",
                     "timeContext": {
-                      "durationMs": 14400000
+                      "durationMs": 86400000
                     },
                     "metrics": [
                       {
@@ -714,7 +904,7 @@
                     ],
                     "timeContextFromParameter": "timerange",
                     "timeContext": {
-                      "durationMs": 14400000
+                      "durationMs": 86400000
                     },
                     "metrics": [
                       {
@@ -747,7 +937,7 @@
                     ],
                     "timeContextFromParameter": "timerange",
                     "timeContext": {
-                      "durationMs": 14400000
+                      "durationMs": 86400000
                     },
                     "metrics": [
                       {
@@ -938,7 +1128,7 @@
                     "size": 2,
                     "title": "Restart Count per Pod",
                     "timeContext": {
-                      "durationMs": 3600000
+                      "durationMs": 86400000
                     },
                     "timeContextFromParameter": "timerange",
                     "queryType": 0,
@@ -977,11 +1167,11 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": "KubeEvents \r\n| where ObjectKind == 'Pod'\r\n| summarize max(LastSeen),max(Count) by ClusterName,Namespace,Name, KubeEventType, Message\r\n| where max_LastSeen {timerange:value}\r\n| project max_LastSeen,ClusterName,Namespace,Name,KubeEventType,max_Count,Message\r\n| order by max_LastSeen desc ",
+                    "query": "let AKSCluster = dynamic([{AKSCluster}]);\r\nKubeEvents \r\n| where ObjectKind == 'Pod' and ClusterId in (AKSCluster)\r\n| summarize max(LastSeen),max(Count) by ClusterName,Namespace,Name, KubeEventType, Message\r\n| where max_LastSeen {timerange:value}\r\n| project max_LastSeen,ClusterName,Namespace,Name,KubeEventType,max_Count,Message\r\n| order by max_LastSeen desc",
                     "size": 0,
                     "title": "Last Errors Events",
                     "timeContext": {
-                      "durationMs": 3600000
+                      "durationMs": 86400000
                     },
                     "timeContextFromParameter": "timerange",
                     "exportFieldName": "Name",
@@ -1000,11 +1190,11 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": "let AKSCluster = dynamic([{AKSCluster}]);\r\nKubePodInventory\r\n| where ClusterId in (AKSCluster)\r\n| where PodIp contains '.'\r\n| summarize arg_max(TimeGenerated,PodRestartCount) by Name,ClusterName,Namespace,PodStatus,PodIp,PodStartTime\r\n| summarize arg_max(TimeGenerated, PodStatus) by ClusterName,Namespace,Name,PodIp,PodStartTime,\r\nPodRunningTime=(TimeGenerated - PodStartTime),PodRestartCount\r\n| project TimeGenerated,ClusterName, Namespace, Name, PodStatus, PodRestartCount ,PodRunningTime,PodIp",
+                    "query": "let AKSCluster = dynamic([{AKSCluster}]);\r\nKubePodInventory\r\n| where ClusterId in (AKSCluster)\r\n| summarize arg_max(TimeGenerated,PodRestartCount) by Name,ClusterName,Namespace,PodStatus,PodIp,PodStartTime\r\n| summarize arg_max(TimeGenerated, PodStatus) by ClusterName,Namespace,Name,PodIp,PodStartTime,\r\nPodRunningTime=(TimeGenerated - PodStartTime),PodRestartCount\r\n| project TimeGenerated,ClusterName, Namespace, Name, PodStatus, PodRestartCount ,PodRunningTime,PodIp",
                     "size": 0,
                     "title": "Pod Status",
                     "timeContext": {
-                      "durationMs": 3600000
+                      "durationMs": 86400000
                     },
                     "timeContextFromParameter": "timerange",
                     "exportFieldName": "Name",
@@ -1024,6 +1214,12 @@
                           "formatOptions": {
                             "thresholdsOptions": "colors",
                             "thresholdsGrid": [
+                              {
+                                "operator": "==",
+                                "thresholdValue": "Failed",
+                                "representation": "redBright",
+                                "text": "{0}{1}"
+                              },
                               {
                                 "operator": "==",
                                 "thresholdValue": "Terminating",
@@ -1108,7 +1304,7 @@
                     "size": 0,
                     "title": "Pod Log",
                     "timeContext": {
-                      "durationMs": 0
+                      "durationMs": 86400000
                     },
                     "timeContextFromParameter": "timerange",
                     "showRefreshButton": true,
@@ -1172,7 +1368,7 @@
           {
             "type": 1,
             "content": {
-              "json": "# Databases"
+              "json": "# Databases\r\n<br>\r\nFor more information regarding Types of Databases on Azure, please access: [Types of Databases on Azure](https://azure.microsoft.com/en-us/product-categories/databases/)\r\n<br>"
             },
             "name": "text - 1"
           },
@@ -1284,7 +1480,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "## SQL"
+                    "json": "## SQL\r\n<br>\r\nAzure SQL is a family of managed, secure, and intelligent products that use the SQL Server database engine in the Azure cloud.\r\n<br>\r\nIn Azure, you can have your SQL Server workloads running as a hosted service (PaaS), or a hosted infrastructure (IaaS). For more information: [What is Azure SQL?](https://docs.microsoft.com/en-us/azure/azure-sql/azure-sql-iaas-vs-paas-what-is-overview)\r\n<br>"
                   },
                   "name": "text - 1"
                 },
@@ -1403,7 +1599,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "## MySQL"
+                    "json": "## MySQL\r\n<br>\r\nAzure Database for MySQL is a relational database service in the Microsoft cloud based on the MySQL Community Edition (available under the GPLv2 license) database engine, versions 5.6, 5.7, and 8.0.\r\n[What is Azure Database for MySQL?](https://docs.microsoft.com/en-us/azure/mysql/overview)\r\n<br>"
                   },
                   "name": "text - 1"
                 },
@@ -1547,7 +1743,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "## PostgreSQL"
+                    "json": "## PostgreSQL\r\n<br>\r\nAzure Database for PostgreSQL is a relational database service in the Microsoft cloud based on the PostgreSQL Community Edition (available under the GPLv2 license) database engine. [What is Azure Database for PostgreSQL?](https://docs.microsoft.com/en-us/azure/postgresql/overview)\r\n<br>"
                   },
                   "name": "text - 1"
                 },
@@ -1717,7 +1913,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "## MariaDB"
+                    "json": "## MariaDB\r\n<br>\r\nAzure Database for MariaDB is a relational database service in the Microsoft cloud. Azure Database for MariaDB is based on the MariaDB community edition (available under the GPLv2 license) database engine, version 10.2 and 10.3. [What is Azure Database for MariaDB?](https://docs.microsoft.com/en-us/azure/mariadb/overview)\r\n<br>"
                   },
                   "name": "text - 0"
                 },
@@ -1770,11 +1966,119 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "resources\r\n| where type == \"microsoft.network/azurefirewalls\"\r\n| join kind=leftouter (resources\r\n\t| where type == \"microsoft.network/azurefirewalls\"\r\n\t| extend rul=properties.natRuleCollections\r\n\t| mv-expand rul\r\n\t| extend rul2=rul.properties.rules\r\n\t| mv-expand rul2\r\n\t| summarize NATCount=count(rul2.name) by id)\r\n\ton $left.id == $right.id\r\n| join kind=leftouter (resources\r\n\t| where type == \"microsoft.network/azurefirewalls\"\r\n\t| extend rul=properties.firewallPolicy\r\n\t| mv-expand rul\r\n\t| summarize POLCount=count(rul.id) by id)\r\n\ton $left.id == $right.id\r\n| join kind=leftouter (resources\r\n\t| where type == \"microsoft.network/azurefirewalls\"\r\n\t| extend rul=properties.networkRuleCollections\r\n\t| mv-expand rul\r\n\t| summarize NETCount=count(rul.id) by id)\r\n\ton $left.id == $right.id\r\n| project[\"Resource Group\"]=resourceGroup,[\"Name\"]=name,[\"Location\"]=location,[\"SKU\"]=tostring(properties.sku.tier),NATCount,POLCount,NETCount",
+              "query": "AzureMetrics \r\n| where MetricName == 'FirewallHealth'\r\n| summarize [\"Firewall Health\"]=avg(Minimum) by Resource",
+              "size": 1,
+              "aggregation": 3,
+              "title": "Firewall Health",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "timerange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspace}"
+              ],
+              "visualization": "tiles",
+              "tileSettings": {
+                "titleContent": {
+                  "columnMatch": "Resource",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "Firewall Health",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "auto"
+                  },
+                  "numberFormat": {
+                    "unit": 1,
+                    "options": {
+                      "style": "decimal",
+                      "useGrouping": false,
+                      "maximumFractionDigits": 0,
+                      "maximumSignificantDigits": 1
+                    }
+                  }
+                },
+                "showBorder": false
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 4"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "AzureMetrics \r\n| where MetricName == 'SNATPortUtilization'\r\n| summarize by bin(TimeGenerated,10m),Resource,[\"SNATPortUtilization\"]=Count",
+              "size": 1,
+              "aggregation": 2,
+              "title": "SNAT Port Utilization",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "timerange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspace}"
+              ],
+              "visualization": "timechart",
+              "tileSettings": {
+                "showBorder": false,
+                "titleContent": {
+                  "columnMatch": "Resource",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "SNATPortUtilization",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "auto"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                }
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 5"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "AzureMetrics \r\n| where MetricName == 'DataProcessed'\r\n| summarize [\"Data Processed (Bytes)\"]=sum(Total) by bin(TimeGenerated,10m),Resource\r\n| render timechart ",
+              "size": 1,
+              "title": "Data Processed",
+              "timeContext": {
+                "durationMs": 86400000
+              },
+              "timeContextFromParameter": "timerange",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "crossComponentResources": [
+                "{LogAnalyticsWorkspace}"
+              ]
+            },
+            "name": "query - 3"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "resources\r\n| where type == \"microsoft.network/azurefirewalls\"\r\n| join kind=leftouter (resources\r\n\t| where type == \"microsoft.network/azurefirewalls\"\r\n\t| extend rul=properties.natRuleCollections\r\n\t| mv-expand rul\r\n\t| extend rul2=rul.properties.rules\r\n\t| mv-expand rul2\r\n\t| summarize NATCount=count(rul2.name) by id)\r\n\ton $left.id == $right.id\r\n| join kind=leftouter (resources\r\n\t| where type == \"microsoft.network/azurefirewalls\"\r\n\t| extend rul=properties.firewallPolicy\r\n\t| mv-expand rul\r\n\t| summarize POLCount=count(rul.id) by id)\r\n\ton $left.id == $right.id\r\n| join kind=leftouter (resources\r\n\t| where type == \"microsoft.network/azurefirewalls\"\r\n\t| extend rul=properties.networkRuleCollections\r\n\t| mv-expand rul\r\n\t| summarize NETCount=count(rul.id) by id)\r\n\ton $left.id == $right.id\r\n| project[\"Resource Group\"]=resourceGroup,[\"Name\"]=name,[\"Location\"]=location,[\"SKU\"]=tostring(properties.sku.tier),[\"Threat Intel Mode\"]=properties.threatIntelMode,NATCount,POLCount,NETCount",
               "size": 0,
-              "title": "Azure Firewalls",
-              "exportFieldName": "name",
-              "exportParameterName": "AzFW",
+              "title": "Azure Firewall",
+              "exportFieldName": "Name",
+              "exportParameterName": "AzFirewall",
+              "exportDefaultValue": " ",
               "queryType": 1,
               "resourceType": "microsoft.resourcegraph/resources",
               "crossComponentResources": [
@@ -1791,9 +2095,10 @@
               "size": 0,
               "title": "Firewall Log",
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 86400000
               },
               "timeContextFromParameter": "timerange",
+              "showRefreshButton": true,
               "showExportToExcel": true,
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces",
@@ -1851,7 +2156,7 @@
           {
             "type": 1,
             "content": {
-              "json": "AzureXRay - **Version 0.1.4**",
+              "json": "AzureXRay - **Version 0.1.5**",
               "style": "info"
             },
             "name": "text - 6",
