@@ -210,9 +210,6 @@
                     "query": "SigninLogs\r\n| summarize toint(count(UserPrincipalName)) by bin(TimeGenerated, 5m),OperationName\r\n| render timechart",
                     "size": 1,
                     "title": "Current Sign-In",
-                    "timeContext": {
-                      "durationMs": 86400000
-                    },
                     "timeContextFromParameter": "timerange",
                     "queryType": 0,
                     "resourceType": "microsoft.operationalinsights/workspaces",
@@ -230,9 +227,6 @@
                     "query": "SigninLogs\r\n| summarize toint(count(UserPrincipalName)) by bin(TimeGenerated, 1d),OperationName",
                     "size": 1,
                     "title": "Daily Sign-In",
-                    "timeContext": {
-                      "durationMs": 86400000
-                    },
                     "timeContextFromParameter": "timerange",
                     "queryType": 0,
                     "resourceType": "microsoft.operationalinsights/workspaces",
@@ -251,9 +245,6 @@
                     "query": "SigninLogs\r\n| where isnotnull (LocationDetails.city)\r\n| summarize arg_max(CorrelationId, *) by CorrelationId\r\n| project [\"City\"]= LocationDetails.city, LocationDetails.geoCoordinates.longitude, LocationDetails.geoCoordinates.latitude",
                     "size": 2,
                     "title": "Sign-In Heat Map",
-                    "timeContext": {
-                      "durationMs": 86400000
-                    },
                     "timeContextFromParameter": "timerange",
                     "queryType": 0,
                     "resourceType": "microsoft.operationalinsights/workspaces",
@@ -287,9 +278,6 @@
                     "size": 0,
                     "showAnalytics": true,
                     "title": "Sign-In Details",
-                    "timeContext": {
-                      "durationMs": 86400000
-                    },
                     "timeContextFromParameter": "timerange",
                     "showExportToExcel": true,
                     "queryType": 0,
@@ -724,7 +712,6 @@
                   "crossComponentResources": [
                     "{Subscription}"
                   ],
-                  "value": [],
                   "typeSettings": {
                     "additionalResourceOptions": [],
                     "showDefault": false
@@ -733,17 +720,15 @@
                     "durationMs": 86400000
                   },
                   "queryType": 1,
-                  "resourceType": "microsoft.resourcegraph/resources"
+                  "resourceType": "microsoft.resourcegraph/resources",
+                  "value": []
                 }
               ],
               "style": "formHorizontal",
               "queryType": 1,
               "resourceType": "microsoft.resourcegraph/resources"
             },
-            "name": "parameters - 3",
-            "styleSettings": {
-              "maxWidth": "40%"
-            }
+            "name": "parameters - 3"
           },
           {
             "type": 1,
@@ -1124,12 +1109,9 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": "let AKSCluster = dynamic([{AKSCluster}]);\r\nKubePodInventory \r\n| where Namespace != 'kube-system' and ClusterId in (AKSCluster)\r\n| summarize arg_max(TimeGenerated,PodRestartCount) by Name\r\n| project PodRestartCount, [\"Pod\"]=Name",
+                    "query": "let AKSCluster = dynamic([{AKSCluster}]);\r\nKubePodInventory \r\n| where Namespace != 'kube-system' and ClusterId in~ (AKSCluster)\r\n| summarize arg_max(TimeGenerated,PodRestartCount) by Name\r\n| project PodRestartCount, [\"Pod\"]=Name",
                     "size": 2,
                     "title": "Restart Count per Pod",
-                    "timeContext": {
-                      "durationMs": 86400000
-                    },
                     "timeContextFromParameter": "timerange",
                     "queryType": 0,
                     "resourceType": "microsoft.operationalinsights/workspaces",
@@ -1167,12 +1149,9 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": "let AKSCluster = dynamic([{AKSCluster}]);\r\nKubeEvents \r\n| where ObjectKind == 'Pod' and ClusterId in (AKSCluster)\r\n| summarize max(LastSeen),max(Count) by ClusterName,Namespace,Name, KubeEventType, Message\r\n| where max_LastSeen {timerange:value}\r\n| project max_LastSeen,ClusterName,Namespace,Name,KubeEventType,max_Count,Message\r\n| order by max_LastSeen desc",
+                    "query": "let AKSCluster = dynamic({AKSCluster});\r\n\r\nKubeEvents \r\n| where ObjectKind == 'Pod' and ClusterId in~ (AKSCluster)\r\n| summarize max(LastSeen),max(Count) by ClusterName,Namespace,Name, KubeEventType, Message\r\n| where max_LastSeen {timerange:value}\r\n| project max_LastSeen,ClusterName,Namespace,Name,KubeEventType,max_Count,Message\r\n| order by max_LastSeen desc",
                     "size": 0,
                     "title": "Last Errors Events",
-                    "timeContext": {
-                      "durationMs": 86400000
-                    },
                     "timeContextFromParameter": "timerange",
                     "exportFieldName": "Name",
                     "exportParameterName": "PodName",
@@ -1190,12 +1169,9 @@
                   "type": 3,
                   "content": {
                     "version": "KqlItem/1.0",
-                    "query": "let AKSCluster = dynamic([{AKSCluster}]);\r\nKubePodInventory\r\n| where ClusterId in (AKSCluster)\r\n| summarize arg_max(TimeGenerated,PodRestartCount) by Name,ClusterName,Namespace,PodStatus,PodIp,PodStartTime\r\n| summarize arg_max(TimeGenerated, PodStatus) by ClusterName,Namespace,Name,PodIp,PodStartTime,\r\nPodRunningTime=(TimeGenerated - PodStartTime),PodRestartCount\r\n| project TimeGenerated,ClusterName, Namespace, Name, PodStatus, PodRestartCount ,PodRunningTime,PodIp",
+                    "query": "let AKSCluster = dynamic([{AKSCluster}]);\r\nKubePodInventory\r\n| where ClusterId in~ (AKSCluster)\r\n| summarize arg_max(TimeGenerated,PodRestartCount) by Name,ClusterName,Namespace,PodStatus,PodIp,PodStartTime\r\n| summarize arg_max(TimeGenerated, PodStatus) by ClusterName,Namespace,Name,PodIp,PodStartTime,\r\nPodRunningTime=(TimeGenerated - PodStartTime),PodRestartCount\r\n| project TimeGenerated,ClusterName, Namespace, Name, PodStatus, PodRestartCount ,PodRunningTime,PodIp",
                     "size": 0,
                     "title": "Pod Status",
-                    "timeContext": {
-                      "durationMs": 86400000
-                    },
                     "timeContextFromParameter": "timerange",
                     "exportFieldName": "Name",
                     "exportParameterName": "PodName",
@@ -1257,14 +1233,8 @@
                       ],
                       "labelSettings": [
                         {
-                          "columnId": "TimeGenerated"
-                        },
-                        {
                           "columnId": "ClusterName",
                           "label": "Cluster Name"
-                        },
-                        {
-                          "columnId": "Namespace"
                         },
                         {
                           "columnId": "Name",
@@ -1303,9 +1273,6 @@
                     "query": "let PodName1 = @\"{PodName}\";\r\nContainerLog\r\n| where TimeGenerated {timerange}\r\n| join kind=leftouter (\r\n    KubePodInventory\r\n    | where TimeGenerated {timerange}\r\n    | summarize by ContainerID,Name\r\n    ) on ContainerID\r\n| where Name1 == PodName1\r\n| summarize by TimeGenerated,Name1,LogEntry\r\n| order by TimeGenerated desc",
                     "size": 0,
                     "title": "Pod Log",
-                    "timeContext": {
-                      "durationMs": 86400000
-                    },
                     "timeContextFromParameter": "timerange",
                     "showRefreshButton": true,
                     "showExportToExcel": true,
@@ -1327,14 +1294,8 @@
                       "rowLimit": 500,
                       "labelSettings": [
                         {
-                          "columnId": "TimeGenerated"
-                        },
-                        {
                           "columnId": "Name1",
                           "label": "Pod Name"
-                        },
-                        {
-                          "columnId": "LogEntry"
                         }
                       ]
                     }
